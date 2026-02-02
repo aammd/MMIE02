@@ -1,7 +1,10 @@
 ---
-title: "MMIE02"
+title: "MMIE02: Mixed Methods in Ecology"
 ---
 
-[What is a Linear Model?](slides/01-01-intro/)
-[The importance of simulation for validating models](slides/01-02-simulation/)
-[simulation exercise](exercises/01-simulation/)
+## Monday 02 Feb
+
+* [What is a Linear Model?](slides/01-01-intro/)
+* [The importance of simulation for validating models](slides/01-02-simulation/) 
+* [simulation exercise](exercises/01-simulation/)
+* [Intro to some useful datasets](slides/01-03-building-plotting/)

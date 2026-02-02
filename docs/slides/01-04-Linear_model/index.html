@@ -10,8 +10,9 @@
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.3.353">
 
-  <meta name="author" content="Andrew MacDonald">
-  <title>MMIE02 - Introduction</title>
+  <meta name="author" content="Andrew MacDonald &amp; Guillaume Blanchet">
+  <meta name="dcterms.date" content="2026-02-02">
+  <title>MMIE02 - Linear models</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -29,6 +30,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -243,7 +309,6 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
-      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -326,183 +391,380 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Introduction</h1>
-  <p class="subtitle">Day 1 session 1</p>
+  <h1 class="title">Linear models</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Andrew MacDonald 
+Andrew MacDonald &amp; Guillaume Blanchet 
 </div>
 </div>
 </div>
 
+  <p class="date">2026-02-02</p>
 </section>
-<section id="what-we-want-to-do-during-this-course" class="slide level2">
-<h2>What we want to do during this course</h2>
-<ul>
-<li class="fragment">General overview of linear models</li>
-<li class="fragment">Probability distributions</li>
-<li class="fragment">Frequentist and Bayesian approaches</li>
-<li class="fragment">GLMMs for different kinds of data</li>
-</ul>
+<section id="basic-regression-model" class="slide level2">
+<h2>Basic regression model</h2>
+<div style="font-size: 0.8em">
+<p>Hierarchical models are a generalized version of the classic regression models you have seen in your undergraduate courses.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.8em">
+<p>In its simplest form, a regression model is usually presented as</p>
+</div>
+</div>
+<div class="fragment">
+<p><span class="math display">\[
+y_i = \beta_0 + \beta_1 x_{i} + \varepsilon
+\]</span></p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.8em">
+<p>It is known as a <strong>simple linear model</strong>, where :</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.8em">
+<p><span class="math inline">\(y_i\)</span> is the value of a response variable for observation <span class="math inline">\(i\)</span></p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.8em">
+<p><span class="math inline">\(x_i\)</span> is the value of an explanatory variable for observation <span class="math inline">\(i\)</span></p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.8em">
+<p><span class="math inline">\(\beta_0\)</span> is the model intercept</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.8em">
+<p><span class="math inline">\(\beta_1\)</span> is the model slope</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.8em">
+<p><span class="math inline">\(\varepsilon\)</span> is the error term</p>
+</div>
+</div>
 </section>
-<section id="quick-personal-introduction" class="slide level2">
-<h2>Quick personal introduction</h2>
+<section id="basic-regression-model-1" class="slide level2">
+<h2>Basic regression model</h2>
+<p>The cool thing about the simple linear model is that it can be studied visually quite easily.</p>
+<div class="fragment">
+<p>For example if we are interested in knowing how a newly discovered plant species (<em>Bidonia exemplaris</em>) reacts to humidity, we can relate the biomass of <em>B. exemplaris</em> sampled at 100 sites with the soil humidity content and readily visual the data and the trend.</p>
+</div>
+</section>
+<section id="basic-regression-model-2" class="slide level2">
+<h2>Basic regression model</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-1-1.png" width="768" class="r-stretch quarto-figure-center"></section>
+<section id="regression-parameters" class="slide level2">
+<h2>Regression parameters</h2>
+<p>Generally, the <strong>slope</strong> and the <strong>intercept</strong> are the regression parameters we focus on when studying the simple linear model, but there is another one that is very important to consider, especially for this course.</p>
+<div class="fragment">
+<p><strong>Any ideas which one it is ?</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://www.i2symbol.com/pictures/emojis/3/9/7/2/3972d0a5cdf7dffdaf58a912331839c7_384.png" style="width:35.0%"></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="regression-parameters-1" class="slide level2">
+<h2>Regression parameters</h2>
+<div style="font-size: 0.75em">
+<p>If we go back to the mathematical description of the model</p>
+<p><span class="math display">\[
+y_i = \beta_0 + \beta_1 x_{i} + \varepsilon
+\]</span></p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.75em">
+<p>we can see that in the simple linear regression the error term (<span class="math inline">\(\varepsilon\)</span>) has actually a very precise definition:</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.75em">
+<p><span class="math display">\[\varepsilon \sim \mathcal{N}(0, \sigma^2)\]</span></p>
+</div>
+<div style="font-size: 0.75em">
+<p>where <span class="math inline">\(\sigma^2\)</span> is an estimated variance.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.75em">
+<p>In words, it means that the error in a simple linear regression follows a Gaussian distribution with a variance that is estimated.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.75em">
+<p>For most of the course, we will play with the variance parameter <span class="math inline">\(\sigma^2\)</span> in a bunch of different ways.</p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.75em">
+<p>But before we do this, we need to understand a bit more about how this parameter influence the model.</p>
+</div>
+</div>
+</section>
+<section id="regression-parameters-2" class="slide level2">
+<h2>Regression parameters</h2>
+<p>A first way to do this is to think about the simple linear regression in a slightly different way. Specifically, based on what we learned in the previous slide the simple linear regression can be rewritten as <span class="math display">\[
+y \sim \mathcal{N}(\beta_0 + \beta_1 x_{i}, \sigma^2)
+\]</span></p>
+<div class="fragment">
+<p>As we will see later in this course, this writting style will become particularly useful.</p>
+</div>
+</section>
+<section id="regression-parameters-3" class="slide level2">
+<h2>Regression parameters</h2>
+<p><strong>Variance of the model (</strong><span class="math inline">\(\sigma^2\)</span>)</p>
+<div style="font-size: 0.75em">
+<p>In essence, <span class="math inline">\(\sigma^2\)</span> tells us about what the model could not account for.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.75em">
+<p>For example, let’s compare the biomass of <em>Bidonia exemplaris</em> with that of <em>Ilovea hockeyshow</em>, another species (a carnivorous plant)</p>
+</div>
+</div>
+<div class="fragment">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-2-1.png" width="1536"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="regression-parameters-4" class="slide level2">
+<h2>Regression parameters</h2>
+<p><strong>Variance of the model (</strong><span class="math inline">\(\sigma^2\)</span>)</p>
+<p>By regressing humidity on the biomass of both plants, we can obtain the estimated parameters for each regression (which are all available using <code>summary.lm</code>)</p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Regression model</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>regBexemplaris <span class="ot">&lt;-</span> <span class="fu">lm</span>(b.exemplaris <span class="sc">~</span> humidity)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>regIhockeyshow <span class="ot">&lt;-</span> <span class="fu">lm</span>(i.hockeyshow <span class="sc">~</span> humidity)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># Summary</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>summaryRegBexemplaris <span class="ot">&lt;-</span> <span class="fu">summary</span>(regBexemplaris)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>summaryRegIhockeyshow <span class="ot">&lt;-</span> <span class="fu">summary</span>(regIhockeyshow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="regression-parameters-5" class="slide level2">
+<h2>Regression parameters</h2>
+<p><strong>Variance of the model (</strong><span class="math inline">\(\sigma^2\)</span>)</p>
 <div class="columns">
-<div class="column" style="width:40%;">
-<ul>
-<li class="fragment">Field ecologist turned statistican</li>
-<li class="fragment">started off in insect-plant interactions, has now done:
-<ul>
-<li class="fragment">fish populations</li>
-<li class="fragment">kangaroo life history</li>
-<li class="fragment">fly mating behaviour</li>
-<li class="fragment">animal personality</li>
-</ul></li>
-<li class="fragment">Mostly a Bayesian</li>
-<li class="fragment">Please introduce yourselves and your projects!</li>
-</ul>
-</div><div class="column" style="width:60%;">
-<p><img data-src="../../img/me.png" style="width:60.0%"></p>
+<div class="column" style="width:50%;">
+<p>For <em>Bidonia exemplaris</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Estimated coefficients</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>summaryRegBexemplaris<span class="sc">$</span>coefficients[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Estimate Std. Error
+(Intercept) 4.015999 0.05235200
+humidity    1.313897 0.08845811</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Estimated variance</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>summaryRegBexemplaris<span class="sc">$</span>sigma</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5232624</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p>For <em>Ilovea hockeyshow</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Estimated coefficients</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>summaryRegIhockeyshow<span class="sc">$</span>coefficients[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Estimate  Std. Error
+(Intercept) 3.991785 0.008928294
+humidity    1.271250 0.015085956</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Estimated variance</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>summaryRegIhockeyshow<span class="sc">$</span>sigma</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.089239</code></pre>
+</div>
+</div>
 </div>
 </div>
 </section>
-<section>
-<section id="course-resources-books-i-find-useful" class="title-slide slide level1 center">
-<h1>Course resources – books I find useful</h1>
-
+<section id="limits-of-the-simple-linear-regression" class="slide level2">
+<h2>Limits of the simple linear regression</h2>
+<p>There are two major pitfalls of the simple linear model for problems in the life sciences</p>
+<div class="fragment">
+<ol type="1">
+<li>One explanatory is almost never enough to approach biological questions nowadays.</li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="2" type="1">
+<li>The simple linear model assumes that the error follows a Gaussian distribution.</li>
+</ol>
+</div>
 </section>
-<section id="statistical-rethinking" class="slide level2">
-<h2>Statistical Rethinking</h2>
-
-<img data-src="https://images.tandf.co.uk/common/jackets/crclarge/978042902/9780429029608.jpg" style="width:30.0%" class="r-stretch quarto-figure-center"><p>A good portion of this course material is based on this book! it is a fabulous guide to self-teaching!</p>
-</section>
-<section id="bayesian-data-analysis" class="slide level2">
-<h2>Bayesian Data Analysis</h2>
-
-<img data-src="https://www.booktopia.com.au/covers/big/9780521867061/5512/data-analysis-using-regression-and-multilevel-hierarchical-models.jpg" style="width:30.0%" class="r-stretch quarto-figure-center"><p>Everything is there – rather technical !</p>
-</section>
-<section id="bayesian-data-analysis-1" class="slide level2">
-<h2>Bayesian Data Analysis</h2>
-
-<img data-src="https://pup-assets.imgix.net/onix/images/9780691159287.jpg?w=410&amp;auto=format" class="r-stretch"><p>Excellent pencil-and-paper intro to Bayesian thinking</p>
-</section>
-<section id="course-datasets" class="slide level2">
-<h2>Course datasets</h2>
-<ul>
-<li class="fragment"><a href="https://allisonhorst.github.io/palmerpenguins/">Palmer Penguins</a></li>
-<li class="fragment">mite data from the <code>vegan</code> package</li>
-<li class="fragment">Quinn and Keough datasets</li>
-</ul>
-</section></section>
-<section>
-<section id="what-is-a-linear-model" class="title-slide slide level1 center">
-<h1>What is a linear model</h1>
-
-</section>
-<section id="some-examples-of-linear-models-in-ecology" class="slide level2">
-<h2>Some examples of linear models in Ecology:</h2>
-<ul>
-<li class="fragment">a randomized block design</li>
-<li class="fragment">BACI - pre-treatment variable</li>
-<li class="fragment">growth over time</li>
-<li class="fragment">factorial designs</li>
-</ul>
-</section>
-<section id="extensions-to-other-kinds-of-data" class="slide level2">
-<h2>Extensions to other kinds of data</h2>
-<p>Linear models can be “<em>generalized</em>” to deal with many kinds of data types:</p>
-<ul>
-<li class="fragment">counts</li>
-<li class="fragment">proportions</li>
-<li class="fragment">survival times</li>
-<li class="fragment">and more</li>
-</ul>
-</section>
-<section id="putting-models-inside-models-many-names-for-the-same-idea" class="slide level2">
-<h2>Putting models inside models: Many names for the same idea</h2>
-<p>Hierarchical models, AKA:</p>
-<ul>
-<li class="fragment"><p>Random effect models</p></li>
-<li class="fragment"><p>Mixed models</p></li>
-<li class="fragment"><p>Multilevel models</p></li>
-<li class="fragment"><p>Variance component models</p></li>
-<li class="fragment"><p>Error component models</p></li>
-</ul>
-</section></section>
-<section>
-<section id="discussion-what-models-have-you-used-in-the-past" class="title-slide slide level1 center">
-<h1>Discussion: What models have you used in the past?</h1>
-
-</section>
-<section id="structure-of-linear-models" class="slide level2">
-<h2>Structure of linear models</h2>
+<section id="multiple-linear-regression" class="slide level2">
+<h2>Multiple linear regression</h2>
+<div style="font-size: 0.85em">
+<p>Simple linear regression can be extended to account for multiple explanatory variables to study more complex problems. This type of regression model is known as a <strong>multiple linear regression</strong>.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.85em">
+<p>Mathematically, a multiple linear regression can be defined as</p>
 <p><span class="math display">\[
-\begin{align}
-y &amp;\sim \text{Normal}(\bar{y}, \sigma) \\
-\bar{y} &amp;= \textbf{X} \beta_1 + b_0 \\
-\end{align}
+y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip} + \varepsilon
 \]</span></p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.85em">
+<p>Theoretically, estimating the parameters of a multiple regression model is done the same ways as for simple linear regression. However, technically, matrix algebra is quite practical to use in this context and especially for this course.</p>
+</div>
+</div>
 </section>
-<section id="frequentist-vs-bayes-rival-stastical-paradigms" class="slide level2">
-<h2>Frequentist vs Bayes: “Rival” stastical paradigms?</h2>
-
-<img data-src="../../img/faceoff_faces.png" class="r-stretch"></section>
-<section id="frequentist-approach" class="slide level2">
-<h2>Frequentist approach</h2>
-<ul>
-<li class="fragment"><p>Maximum likelihood – finding parameter values that make the data most likely to have happened.</p></li>
-<li class="fragment"><p>Hypothesis testing: if the data are more extreme than we would observe 1/20 times if the null were true, then we assume that the null is NOT true.</p></li>
-</ul>
-</section>
-<section id="bayesian-approach" class="slide level2">
-<h2>Bayesian approach</h2>
-<p>Looking for the joint probability of the <em>parameters</em> given the data.</p>
+<section id="multiple-linear-regression-1" class="slide level2">
+<h2>Multiple linear regression</h2>
+<div class="fragment">
+<p>In this course, we will rely heavily on multiple linear regression and expand on it by studying how some of the parameters (the <span class="math inline">\(\beta\)</span>s) can depend on other other data and parameters.</p>
+</div>
+<div class="fragment">
+<p>As we saw earlier, a classic way to write multiple linear regression is</p>
 <p><span class="math display">\[
-[\theta|\text{data}] = \frac{[\text{data}|\theta] \times [\theta]}{[\text{data}]}
+y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip} + \varepsilon
 \]</span></p>
-<blockquote>
-<p>using Bayes Rule does not make you a Bayesian. Using probability as a measure of uncertainty makes you a Bayesian</p>
-</blockquote>
+</div>
+<div class="fragment">
+<p>However, we can rewrite this using matrix notation has</p>
+<p><span class="math display">\[
+\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}
+\]</span></p>
+</div>
 </section>
-<section id="math-explanation" class="slide level2">
-<h2>Math explanation</h2>
-<p>$$ [a,b,| X] = </p>
-<p>$$</p>
+<section id="multiple-linear-regression-2" class="slide level2">
+<h2>Multiple linear regression</h2>
+<p><strong>Matrix notation</strong></p>
+<p><span class="math display">\[
+\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}
+\]</span></p>
+<p>Using the matrix notation, we assume that</p>
+<div class="fragment">
+<div style="font-size: 0.9em">
 <ul>
-<li class="fragment">Hypothesis testing: asking if a parameter is well-separated from 0.</li>
+<li><span class="math inline">\(\mathbf{y}\)</span> is a vector of length <span class="math inline">\(n\)</span> (samples)</li>
 </ul>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.9em">
+<ul>
+<li><span class="math inline">\(\mathbf{X}\)</span> is a matrix with <span class="math inline">\(n\)</span> samples (rows) and representing <span class="math inline">\(p\)</span> explanatory variables (columns)</li>
+</ul>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.9em">
+<ul>
+<li><span class="math inline">\(\boldsymbol{\beta}\)</span> is a vector of <span class="math inline">\(p\)</span> regression coefficients</li>
+</ul>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.9em">
+<ul>
+<li><span class="math inline">\(\boldsymbol{\varepsilon}\)</span> is a vector of residuals of length <span class="math inline">\(n\)</span></li>
+</ul>
+</div>
+</div>
 </section>
-<section id="discussion" class="slide level2">
-<h2>Discussion</h2>
-<ul>
-<li class="fragment">before telling you my opinion of linear models, I’d like to have a group discussion about what limitations each of US has experienced with them.</li>
-</ul>
+<section id="error-in-linear-models" class="slide level2">
+<h2>Error in linear models</h2>
+<p>As previously mentioned, in (simple and multiple!) linear regression the error term (<span class="math inline">\(\varepsilon\)</span>) has actually a very precise definition:</p>
+<p><span class="math display">\[\boldsymbol{\varepsilon} \sim \mathcal{MVN}(0, \sigma^2\mathbf{I})\]</span> where <span class="math inline">\(\sigma^2\)</span> is an estimated variance</p>
+<div class="fragment">
+<p>which means that the error in a linear regression follows a Gaussian distribution with an estimated variance.</p>
+</div>
+<div class="fragment">
+<p><strong>Note</strong> The model can be written using matrix notation as<br>
+<span class="math display">\[\mathbf{y} \sim \mathcal{MVN}(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I})\]</span> where <span class="math inline">\(\sigma^2\)</span></p>
+</div>
 </section>
-<section id="linear-models-strengths" class="slide level2">
-<h2>Linear models strengths</h2>
-<ul>
-<li class="fragment">Easy to interpret (?)</li>
-<li class="fragment">Easy to fit .. most of the time</li>
-<li class="fragment">Designed to <strong>match experiments</strong> and test specific hypotheses</li>
-<li class="fragment">Decent approximation to natural phenomenon (c.f. Taylor expansions)</li>
-</ul>
+<section id="generalized-linear-models" class="slide level2">
+<h2>Generalized linear models</h2>
+<div class="fragment">
+<p>If for some reason we do not want our model to have a Gaussian error, <em>generalized</em> linear models (GLMs) have been proposed. In essence, GLMs use <em>link functions</em> to adapt models for them to be used on non-Gaussian data.</p>
+</div>
+<div class="fragment">
+<p>Mathematically, the generic way to write generalized linear model is</p>
+<p><span class="math display">\[
+\widehat{y}_i = g^{-1}(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip})
+\]</span></p>
+</div>
+<div class="fragment">
+<p>or in matrix notation</p>
+<p><span class="math display">\[
+\widehat{\mathbf{y}} = g^{-1}(\mathbf{X}\boldsymbol{\beta})
+\]</span></p>
+<p>where <span class="math inline">\(g\)</span> is the link function and <span class="math inline">\(g^{-1}\)</span> the inverse link function.</p>
+</div>
 </section>
-<section id="linear-model-weaknesses" class="slide level2">
-<h2>Linear model weaknesses</h2>
-<ul>
-<li class="fragment">Easy to OVER interpret</li>
-<li class="fragment">Doesn’t always fit if your data aren’t suitable</li>
-<li class="fragment">overused and uncritically used</li>
-<li class="fragment">Linear models don’t establish <em>causes</em> on their own</li>
-<li class="fragment">Nature has no straight lines</li>
-</ul>
+<section id="generalized-linear-models-1" class="slide level2">
+<h2>Generalized linear models</h2>
+<p><strong>Link functions</strong></p>
+<div style="font-size: 0.75em">
+<p>There are many types of link functions and they are usually directly associated to the underlying data the analysis is carried out on.</p>
+</div>
+<div class="fragment">
+<div style="font-size: 0.75em">
+<p>Arguably the most common link function in ecology is</p>
+</div>
+</div>
+<div class="fragment">
+<p><em>logit link function</em></p>
+<div style="font-size: 0.75em">
+<p>It is commonly used for modelling binary (0-1) data.</p>
+<p><span class="math display">\[
+\mathbf{X}\boldsymbol{\beta} = \ln\left(\frac{\widehat{\mathbf{y}}}{1 - \widehat{\mathbf{y}}}\right)
+\]</span></p>
+</div>
+</div>
+<div class="fragment">
+<div style="font-size: 0.75em">
+<p>The inverse logit link function is</p>
+<p><span class="math display">\[
+\widehat{\mathbf{y}} = \frac{\exp(\mathbf{X}\boldsymbol{\beta})}{1 + \exp(\mathbf{X}\boldsymbol{\beta})} = \frac{1}{1 + \exp(-\mathbf{X}\boldsymbol{\beta})}
+\]</span></p>
+</div>
+</div>
+</section>
+<section id="generalized-linear-models-2" class="slide level2">
+<h2>Generalized linear models</h2>
+<p><strong>Link functions</strong></p>
+<p>Another commonly used link function is</p>
+<div class="fragment">
+<p><em>log link function</em></p>
+<p>It is commonly used for modelling count data.</p>
+<p><span class="math display">\[
+\mathbf{X}\boldsymbol{\beta} = \ln\left(\widehat{\mathbf{y}}\right)
+\]</span></p>
+</div>
+<div class="fragment">
+<p>The inverse logit link function is</p>
+<p><span class="math display">\[
+\widehat{\mathbf{y}} = \exp(\mathbf{X}\boldsymbol{\beta})
+\]</span></p>
 
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</div>
+</section>
     </div>
   </div>
 
@@ -529,13 +791,13 @@ y &amp;\sim \text{Normal}(\bar{y}, \sigma) \\
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': true,
+'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'smaller': true,
+'smaller': false,
  
         // Display controls in the bottom right corner
         controls: false,
@@ -660,14 +922,14 @@ y &amp;\sim \text{Normal}(\bar{y}, \sigma) \\
         previewLinks: false,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
-        transition: 'none',
+        transition: 'slide',
 
         // Transition speed (default/fast/slow)
         transitionSpeed: 'default',
 
         // Transition style for full page slide backgrounds
         // (none/fade/slide/convex/concave/zoom)
-        backgroundTransition: 'none',
+        backgroundTransition: 'fade',
 
         // Number of slides away from the current that are visible
         viewDistance: 3,

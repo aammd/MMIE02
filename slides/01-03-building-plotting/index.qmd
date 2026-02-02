@@ -1,6 +1,6 @@
 ---
-title: "Introduction"
-subtitle: "Day 1 session 1"
+title: "Introduction to the Datasets"
+subtitle: "Day 1 session 3"
 author: "Andrew MacDonald"
 format:
   revealjs:
