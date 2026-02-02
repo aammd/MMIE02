@@ -13,19 +13,6 @@ editor_options:
 
 <!-- Building and plotting a linear model – published data. Introduction to the penguins dataset, building and plotting a model with these data, including a second predictor – simpson’s paradox, comparison of bayesian approach with frequentist. -->
 
-## Introducing the Penguin's dataset
-
-why we like it
-
-## Introducing some other texts I like
-
-Rethinking
-
-## Hobbes and Hooten
-
-## Quinn and Keough
-
-
 
 ## Illustrative datasets
 
@@ -51,7 +38,7 @@ Let's look at them in more details...
 
 ## Oribatid mite data
 
-Aside from being very interesting, this dataset has been sampled at the *Station biologique des Laurentides*, so ~200 km north-west from here.
+Aside from being very interesting, this dataset has been sampled at the *Station biologique des Laurentides*, so \~200 km north-west from here.
 
 . . .
 
@@ -107,20 +94,18 @@ View(mite.env)
 ```
 :::
 
-
 ## Palmer penguins
 
-![The Palmer Archipelago penguins. Artwork by \@allison_horst](../../img/penguins.png){fig-align="center" width="200%"} 
+![The Palmer Archipelago penguins. Artwork by \@allison_horst](../../img/penguins.png){fig-align="center" width="200%"}
 
 ::: {style="font-size: 0.8em"}
 These data were collected from 2007 to 2009 by Dr. Kristen Gorman with the *Palmer Station Long Term Ecological Research Program*, part of the *US Long Term Ecological Research Network*.
 :::
 
-. . . 
+. . .
 
 ::: {style="font-size: 0.8em"}
-The data were imported directly from the Environmental Data Initiative (EDI) Data Portal, and are available for use by CC0 license ("No Rights Reserved") in accordance with the Palmer Station Data Policy.
-[@gorman2014; @horst2020]
+The data were imported directly from the Environmental Data Initiative (EDI) Data Portal, and are available for use by CC0 license ("No Rights Reserved") in accordance with the Palmer Station Data Policy. [@gorman2014; @horst2020]
 :::
 
 ## A handy dataset of three groups
@@ -166,7 +151,6 @@ bill_len_dep <- ggplot(data = penguins,
 bill_len_dep
 ```
 
-
 ## Behold: Simpson's Paradox!
 
 ```{r, echo=FALSE}
@@ -191,8 +175,7 @@ bill_no_species <- ggplot(data = penguins,
 bill_no_species
 ```
 
-
-## There's lots more! 
+## There's lots more!
 
 ::: {style="font-size: 1.5em"}
 ```{r eval=FALSE}
@@ -201,4 +184,4 @@ View(penguins_raw)
 ```
 :::
 
-and also see the official site: [https://allisonhorst.github.io/palmerpenguins/](https://allisonhorst.github.io/palmerpenguins/)
+and also see the official site: <https://allisonhorst.github.io/palmerpenguins/>
