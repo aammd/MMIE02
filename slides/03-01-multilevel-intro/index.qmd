@@ -1,0 +1,60 @@
+---
+title: "index"
+format: html
+---
+
+## Implementation
+
+. . .
+
+-   Hierarchical models have been implemented in many software packages,
+
+. . .
+
+-   in R
+    -   `lme4`, `brms`, `nlme`, `glmmTMB`, `MCMCglmm`, ...
+
+. . .
+
+-   in SAS
+    -   `MIXED`, `HPMIXED`, `GLMMIX`, ...
+
+. . .
+
+-   in Julia
+    -   `MixedModels.jl`
+-   ...
+
+## A bit of vocabulary
+
+**Multiple Definition of *fixed* and *random* effects**
+
+. . .
+
+::: {style="font-size: 0.8em"}
+[(Kreft and De Leeuw 1998)](https://methods.sagepub.com/book/introducing-multilevel-modeling) *Fixed* effects are constant and *random* effect vary
+:::
+
+. . .
+
+::: {style="font-size: 0.8em"}
+[(Searl et al. 1992)](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316856) Effects are *fixed* if they are interesting in themselves or *random* if there is interest in the underlying population
+:::
+
+. . .
+
+::: {style="font-size: 0.8em"}
+[(Green and Tukey 1960)](https://link.springer.com/article/10.1007/BF02288577) When a sample exhausts the population, the corresponding variable is *fixed*; when the sample is a small (i.e., negligible) part of the population the corresponding variable is *random*
+:::
+
+. . .
+
+::: {style="font-size: 0.8em"}
+[(Roy LaMotte 2014)](https://doi.org/10.1002/9781118445112.stat03169) If an effect is assumed to be a realized value of a random variable, it is called a *random* effect
+:::
+
+. . .
+
+::: {style="font-size: 0.8em"}
+[(Robinson 1991)](https://www.jstor.org/stable/2245695) *Fixed* effects are estimated using least squares (or, more generally, maximum likelihood) and *random* effects are estimated with shrinkage.
+:::

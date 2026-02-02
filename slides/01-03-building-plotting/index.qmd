@@ -1,0 +1,204 @@
+---
+title: "Introduction"
+subtitle: "Day 1 session 1"
+author: "Andrew MacDonald"
+format:
+  revealjs:
+    smaller: true
+    scrollable: true
+    incremental: true
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- Building and plotting a linear model – published data. Introduction to the penguins dataset, building and plotting a model with these data, including a second predictor – simpson’s paradox, comparison of bayesian approach with frequentist. -->
+
+## Introducing the Penguin's dataset
+
+why we like it
+
+## Introducing some other texts I like
+
+Rethinking
+
+## Hobbes and Hooten
+
+## Quinn and Keough
+
+
+
+## Illustrative datasets
+
+To illustrate the different models and methods we will discuss in this course, we will rely on a few data sets, which are directly available in different R packages
+
+. . .
+
+-   `mite`, `mite.env` and `mite.xy` available in the `vegan` R package
+
+. . .
+
+-   `penguins` available in the `palmerpenguins` R package
+
+. . .
+
+These datasets are practical because they are manageable in size and will allow you to see how to work out the different example presented in this course.
+
+. . .
+
+Let's look at them in more details...
+
+# Oribatid mite
+
+## Oribatid mite data
+
+Aside from being very interesting, this dataset has been sampled at the *Station biologique des Laurentides*, so ~200 km north-west from here.
+
+. . .
+
+Sampling was carried out in June 1989 on the partially floating vegetation mat surrounding a lake, from the forest border to the free water by Daniel Borcard.
+
+![](https://distinctions.umontreal.ca/fileadmin/prix-distinctions/images/individus/borcard-daniel.jpg){fig-align="center" width="25%"}
+
+## Oribatid mite data
+
+. . .
+
+Oribatid mites are small (usually ranging in size from 0.2 to 1.4 mm) invertebrates that are part of the **Arachnida** class (so they have 8 legs).
+
+![](../../img/Oribatid.jpg){fig-align="center"}
+
+. . .
+
+In the `mite` data, 35 morphospecies were identified and counted across 70 samples.
+
+## Sites coordinates
+
+`mite.xy`
+
+![](../../img/oribatid_xy.jpg){fig-align="center" width="105%"}
+
+## Vegetation cover
+
+`mite.env`
+
+![](../../img/oribatid_veg_cover.jpg){fig-align="center" width="105%"}
+
+## Microtopography and shrub cover
+
+`mite.env`
+
+![](../../img/oribatid_microtopo_shrub.jpg){fig-align="center" width="105%"}
+
+## Substrate density and water content
+
+`mite.env`
+
+![](../../img/oribatid_subdens_water.jpg){fig-align="center" width="105%"}
+
+## Getting the data
+
+::: {style="font-size: 1.5em"}
+```{r eval=FALSE}
+library(vegan)
+data(mite)
+data(mite.env)
+View(mite)
+View(mite.env)
+```
+:::
+
+
+## Palmer penguins
+
+![The Palmer Archipelago penguins. Artwork by \@allison_horst](../../img/penguins.png){fig-align="center" width="200%"} 
+
+::: {style="font-size: 0.8em"}
+These data were collected from 2007 to 2009 by Dr. Kristen Gorman with the *Palmer Station Long Term Ecological Research Program*, part of the *US Long Term Ecological Research Network*.
+:::
+
+. . . 
+
+::: {style="font-size: 0.8em"}
+The data were imported directly from the Environmental Data Initiative (EDI) Data Portal, and are available for use by CC0 license ("No Rights Reserved") in accordance with the Palmer Station Data Policy.
+[@gorman2014; @horst2020]
+:::
+
+## A handy dataset of three groups
+
+```{r penguinpairs, echo=FALSE}
+library(ggplot2)
+library(dplyr)
+penguins %>%
+  select(species, body_mass, starts_with("bill")) %>% 
+  GGally::ggpairs(aes(color = species)) +
+  scale_colour_manual(values = c("darkorange","purple","cyan4")) +
+  scale_fill_manual(values = c("darkorange","purple","cyan4"))
+```
+
+## Behold: Simpson's Paradox!
+
+```{r echo=FALSE}
+bill_len_dep <- ggplot(data = penguins,
+                         aes(x = bill_len,
+                             y = bill_dep,
+                             group = species)) +
+  geom_point(aes(color = species, 
+                 shape = species),
+             size = 3,
+             alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, aes(color = species)) +
+  scale_color_manual(values = c("darkorange","purple","cyan4")) +
+  labs(title = "Penguin bill dimensions",
+       subtitle = "Bill length and depth for Adelie, Chinstrap and Gentoo Penguins at Palmer Station LTER",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)",
+       color = "Penguin species",
+       shape = "Penguin species") +
+  theme(legend.position = c(0.85, 0.15),
+        plot.title = element_text(hjust = 0.5, size = 20),
+        plot.subtitle = element_text(hjust = 0.5, size = 16),
+        plot.title.position = "plot",
+        plot.caption = element_text(hjust = 0, face= "italic"),
+        plot.caption.position = "plot",
+        axis.text=element_text(size=15),
+        axis.title=element_text(size=18,face="bold"))
+
+bill_len_dep
+```
+
+
+## Behold: Simpson's Paradox!
+
+```{r, echo=FALSE}
+bill_no_species <- ggplot(data = penguins,
+                         aes(x = bill_len,
+                             y = bill_dep)) +
+  geom_point() +
+  scale_color_manual(values = c("darkorange","purple","cyan4")) +
+  labs(title = "Penguin bill dimensions (omit species)",
+       subtitle = "Palmer Station LTER",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)") +
+  theme(plot.title.position = "plot",
+        plot.caption = element_text(hjust = 0, face= "italic"),
+        plot.caption.position = "plot",
+        axis.text=element_text(size=15),
+        axis.title=element_text(size=18,face="bold"),
+        plot.title = element_text(hjust = 0.5, size = 20),
+        plot.subtitle = element_text(hjust = 0.5, size = 16)) +
+  geom_smooth(method = "lm", se = FALSE, color = "gray50")
+
+bill_no_species
+```
+
+
+## There's lots more! 
+
+::: {style="font-size: 1.5em"}
+```{r eval=FALSE}
+View(penguins)
+View(penguins_raw)
+```
+:::
+
+and also see the official site: [https://allisonhorst.github.io/palmerpenguins/](https://allisonhorst.github.io/palmerpenguins/)

@@ -1,0 +1,7 @@
+---
+title: "MMIE02"
+---
+
+[What is a Linear Model?](slides/01-01-intro/)
+[The importance of simulation for validating models](slides/01-02-simulation/)
+[simulation exercise](exercises/01-simulation/)

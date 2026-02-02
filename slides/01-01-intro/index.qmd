@@ -1,0 +1,180 @@
+---
+title: "Introduction"
+subtitle: "Day 1 session 1"
+author: "Andrew MacDonald"
+format:
+  revealjs:
+    smaller: true
+    scrollable: true
+    incremental: true
+---
+
+## What we want to do during this course
+
+- General overview of linear models
+- Probability distributions
+- Frequentist and Bayesian approaches
+- GLMMs for different kinds of data
+
+## Quick personal introduction
+
+:::: {.columns}
+
+::: {.column width="40%"}
+* Field ecologist turned statistican
+* started off in insect-plant interactions, has now done:
+    - fish populations
+    - kangaroo life history
+    - fly mating behaviour
+    - animal personality
+* Mostly a Bayesian
+
+:::
+
+::: {.column width="60%"}
+![](../../img/me.png){width=60%}
+:::
+
+::::
+
+## Frequentist vs Bayes: "Rival" stastical paradigms?
+
+![](../../img/faceoff_faces.png)
+
+## Course resources
+
+Books I find useful:
+
+* Hobbs & Hooten 
+* McElreath
+* Gelman et al.
+* Quinn and Keough 
+
+## rethinking
+
+```{r echo=FALSE, out.width="30%", fig.align='center'}
+knitr::include_graphics("https://images.tandf.co.uk/common/jackets/crclarge/978042902/9780429029608.jpg")
+```
+
+A good portion of this course material is based on this book.
+
+
+## Bayesian Data Analysis
+
+```{r echo=FALSE, out.width="30%", fig.align='center'}
+knitr::include_graphics("https://www.booktopia.com.au/covers/big/9780521867061/5512/data-analysis-using-regression-and-multilevel-hierarchical-models.jpg")
+```
+
+Everything is there but it can gets technical !
+
+
+
+## Course datasets
+
+* [Palmer Penguins](https://allisonhorst.github.io/palmerpenguins/)
+* mite data from the `vegan` package
+* Quinn and Keough datasets
+
+
+# What is a linear model
+
+## They have many names: 
+
+Hierarchical models, AKA:
+
+  - Random effect models
+
+  - Mixed models
+
+  - Multilevel models
+
+  - Variance component models
+
+  - Error component models
+
+## Some examples of linear models in Ecology:
+
+* a randomized block design
+* BACI - pre-treatment variable
+* growth over time
+* factorial designs
+
+## Discussion: What models have you used in the past?
+
+## Structure of linear models
+
+## Linear models -- but in math
+
+$$
+\begin{align}
+y &= ax + b
+\end{align}
+$$
+
+## Linear models -- but in math
+
+$$
+\begin{align}
+y &\sim \text{Normal}(\bar{y}, \sigma) \\
+\bar{y} &= ax + b \\
+\end{align}
+$$
+
+* There are _three_ numbers in a straight line (easy to forget!)
+
+## Linear models -- but in math
+
+$$
+\begin{align}
+y &\sim \text{Normal}(\bar{y}, \sigma) \\
+\bar{y} &= \textbf{X} \beta_1 + b_0 \\
+\end{align}
+$$
+
+## Bayesian statistics vs Frequentist
+
+![](../../img/)
+
+## Frequentist approach
+
+* Maximum likelihood -- finding parameter values that make the data most likely to have happened.
+
+* Hypothesis testing: if the data are more extreme than we would observe 1/20 times if the null were true, then we assume that the null is NOT true.
+
+## Bayesian approach 
+
+Looking for the joint probability of the _parameters_ given the data.
+
+$$
+[\theta|\text{data}] = \frac{[\text{data}|\theta] \times [\theta]}{[\text{data}]}
+$$
+
+> using Bayes Rule does not make you a Bayesian. Using probability as a measure of uncertainty makes you a Bayesian
+
+## Math explanation
+
+$$ 
+[a,b,\sigma | X] = \frac{[X | a, b, \sigma][a, b, \sigma]}{[X]}
+
+$$
+
+* Hypothesis testing: asking if a parameter is well-separated from 0.
+
+## Discussion
+
+* before telling you my opinion of linear models, I'd like to have a group discussion about what limitations each of US has experienced with them.
+
+## Linear models strengths
+
+* Easy to interpret (?) 
+* Easy to fit .. most of the time
+* Designed to **match experiments** and test specific hypotheses
+* Decent approximation to natural phenomenon (c.f. Taylor expansions)
+
+## Linear model weaknesses
+
+* Easy to OVER interpret
+* Doesn't always fit if your data aren't suitable
+* overused and uncritically used
+* Linear models don't establish _causes_ on their own
+* Nature has no straight lines

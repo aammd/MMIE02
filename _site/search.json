@@ -1,0 +1,415 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "MMIE02",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2\n\n\nWhat is a Linear Model"
+  },
+  {
+    "objectID": "slides/01-02-simulation/index.html#simulation-can-change-your-science",
+    "href": "slides/01-02-simulation/index.html#simulation-can-change-your-science",
+    "title": "Model building with Simulation",
+    "section": "Simulation can change your science",
+    "text": "Simulation can change your science\nIf you can’t simulate from a model, you do not understand it"
+  },
+  {
+    "objectID": "slides/01-02-simulation/index.html#simulation-recipie",
+    "href": "slides/01-02-simulation/index.html#simulation-recipie",
+    "title": "Model building with Simulation",
+    "section": "Simulation recipie",
+    "text": "Simulation recipie\n\nwrite down your statistical model\nfor each unknown variable: Assign priors (if you’re Bayesian) or pick a plausible value (if you’re frequentist)\ntreat those values like the truth and make a fake dataset with them\ntake this fake dataset and fit the very same model back to these values\nsee if the models estimates are close to the truth"
+  },
+  {
+    "objectID": "slides/01-02-simulation/index.html#why-do-this",
+    "href": "slides/01-02-simulation/index.html#why-do-this",
+    "title": "Model building with Simulation",
+    "section": "Why do this",
+    "text": "Why do this\n\nthe MINIMUM test of a model’s ability is its ability to recover these known parameters\nin reality we DON’T know the true model, but we can hope!"
+  },
+  {
+    "objectID": "slides/01-02-simulation/index.html#exercise-together-simulate-for-a-regression",
+    "href": "slides/01-02-simulation/index.html#exercise-together-simulate-for-a-regression",
+    "title": "Model building with Simulation",
+    "section": "Exercise together – simulate for a regression",
+    "text": "Exercise together – simulate for a regression"
+  },
+  {
+    "objectID": "slides/01-02-simulation/index.html#solo-exercise-simulate-for-a-regression-with-two-predictors",
+    "href": "slides/01-02-simulation/index.html#solo-exercise-simulate-for-a-regression-with-two-predictors",
+    "title": "Model building with Simulation",
+    "section": "Solo exercise – simulate for a regression with two predictors",
+    "text": "Solo exercise – simulate for a regression with two predictors\n\nshould we use the Penguin data actually? have something simple."
+  },
+  {
+    "objectID": "slides/01-02-simulation/index.html#simulating-for-factors",
+    "href": "slides/01-02-simulation/index.html#simulating-for-factors",
+    "title": "Model building with Simulation",
+    "section": "Simulating for factors",
+    "text": "Simulating for factors\n\nneed to consider the contrast matrix that we use for the model\nthere are several forms to consider!"
+  },
+  {
+    "objectID": "slides/01-02-simulation/index.html#discussion-think-about-your-design",
+    "href": "slides/01-02-simulation/index.html#discussion-think-about-your-design",
+    "title": "Model building with Simulation",
+    "section": "Discussion – think about YOUR design",
+    "text": "Discussion – think about YOUR design"
+  },
+  {
+    "objectID": "slides/01-02-simulation/index.html#plotting-to-understand-models",
+    "href": "slides/01-02-simulation/index.html#plotting-to-understand-models",
+    "title": "Model building with Simulation",
+    "section": "Plotting to understand models",
+    "text": "Plotting to understand models\nWe’ve already seen the power of a simulation and plots to understand the model BEFORE we run it.\nLet’s examine plots to understand models AFTER we have run a model."
+  },
+  {
+    "objectID": "slides/01-02-simulation/index.html#prediction-vs-expectation",
+    "href": "slides/01-02-simulation/index.html#prediction-vs-expectation",
+    "title": "Model building with Simulation",
+    "section": "Prediction vs expectation",
+    "text": "Prediction vs expectation\nThere are two kinds of predictions we can make for a simple model:\n\nWhat does the model think is the average response: this is called the “fitted” or “expected” value.\nWhat kind of observations might we make in the future? : these are called predicted observations."
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#introducing-the-penguins-dataset",
+    "href": "slides/01-03-building-plotting/index.html#introducing-the-penguins-dataset",
+    "title": "Introduction",
+    "section": "Introducing the Penguin’s dataset",
+    "text": "Introducing the Penguin’s dataset\nwhy we like it"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#introducing-some-other-texts-i-like",
+    "href": "slides/01-03-building-plotting/index.html#introducing-some-other-texts-i-like",
+    "title": "Introduction",
+    "section": "Introducing some other texts I like",
+    "text": "Introducing some other texts I like\nRethinking"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#hobbes-and-hooten",
+    "href": "slides/01-03-building-plotting/index.html#hobbes-and-hooten",
+    "title": "Introduction",
+    "section": "Hobbes and Hooten",
+    "text": "Hobbes and Hooten"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#quinn-and-keough",
+    "href": "slides/01-03-building-plotting/index.html#quinn-and-keough",
+    "title": "Introduction",
+    "section": "Quinn and Keough",
+    "text": "Quinn and Keough"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#illustrative-datasets",
+    "href": "slides/01-03-building-plotting/index.html#illustrative-datasets",
+    "title": "Introduction",
+    "section": "Illustrative datasets",
+    "text": "Illustrative datasets\nTo illustrate the different models and methods we will discuss in this course, we will rely on a few data sets, which are directly available in different R packages\n\n\nmite, mite.env and mite.xy available in the vegan R package\n\n\n\n\npenguins available in the palmerpenguins R package\n\n\n\nThese datasets are practical because they are manageable in size and will allow you to see how to work out the different example presented in this course.\n\n\nLet’s look at them in more details…"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#oribatid-mite-data",
+    "href": "slides/01-03-building-plotting/index.html#oribatid-mite-data",
+    "title": "Introduction",
+    "section": "Oribatid mite data",
+    "text": "Oribatid mite data\nAside from being very interesting, this dataset has been sampled at the Station biologique des Laurentides, so ~200 km north-west from here.\n\nSampling was carried out in June 1989 on the partially floating vegetation mat surrounding a lake, from the forest border to the free water by Daniel Borcard."
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#oribatid-mite-data-1",
+    "href": "slides/01-03-building-plotting/index.html#oribatid-mite-data-1",
+    "title": "Introduction",
+    "section": "Oribatid mite data",
+    "text": "Oribatid mite data\n\nOribatid mites are small (usually ranging in size from 0.2 to 1.4 mm) invertebrates that are part of the Arachnida class (so they have 8 legs).\n\n\n\n\n\n\n\nIn the mite data, 35 morphospecies were identified and counted across 70 samples."
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#sites-coordinates",
+    "href": "slides/01-03-building-plotting/index.html#sites-coordinates",
+    "title": "Introduction",
+    "section": "Sites coordinates",
+    "text": "Sites coordinates\nmite.xy"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#vegetation-cover",
+    "href": "slides/01-03-building-plotting/index.html#vegetation-cover",
+    "title": "Introduction",
+    "section": "Vegetation cover",
+    "text": "Vegetation cover\nmite.env"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#microtopography-and-shrub-cover",
+    "href": "slides/01-03-building-plotting/index.html#microtopography-and-shrub-cover",
+    "title": "Introduction",
+    "section": "Microtopography and shrub cover",
+    "text": "Microtopography and shrub cover\nmite.env"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#substrate-density-and-water-content",
+    "href": "slides/01-03-building-plotting/index.html#substrate-density-and-water-content",
+    "title": "Introduction",
+    "section": "Substrate density and water content",
+    "text": "Substrate density and water content\nmite.env"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#getting-the-data",
+    "href": "slides/01-03-building-plotting/index.html#getting-the-data",
+    "title": "Introduction",
+    "section": "Getting the data",
+    "text": "Getting the data"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#palmer-penguins",
+    "href": "slides/01-03-building-plotting/index.html#palmer-penguins",
+    "title": "Introduction",
+    "section": "Palmer penguins",
+    "text": "Palmer penguins\n\nThe Palmer Archipelago penguins. Artwork by @allison_horst\nThese data were collected from 2007 to 2009 by Dr. Kristen Gorman with the Palmer Station Long Term Ecological Research Program, part of the US Long Term Ecological Research Network.\n\n\n\nThe data were imported directly from the Environmental Data Initiative (EDI) Data Portal, and are available for use by CC0 license (“No Rights Reserved”) in accordance with the Palmer Station Data Policy. [@gorman2014; @horst2020]"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#a-handy-dataset-of-three-groups",
+    "href": "slides/01-03-building-plotting/index.html#a-handy-dataset-of-three-groups",
+    "title": "Introduction",
+    "section": "A handy dataset of three groups",
+    "text": "A handy dataset of three groups"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#behold-simpsons-paradox",
+    "href": "slides/01-03-building-plotting/index.html#behold-simpsons-paradox",
+    "title": "Introduction",
+    "section": "Behold: Simpson’s Paradox!",
+    "text": "Behold: Simpson’s Paradox!"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#behold-simpsons-paradox-1",
+    "href": "slides/01-03-building-plotting/index.html#behold-simpsons-paradox-1",
+    "title": "Introduction",
+    "section": "Behold: Simpson’s Paradox!",
+    "text": "Behold: Simpson’s Paradox!"
+  },
+  {
+    "objectID": "slides/01-03-building-plotting/index.html#theres-lots-more",
+    "href": "slides/01-03-building-plotting/index.html#theres-lots-more",
+    "title": "Introduction",
+    "section": "There’s lots more!",
+    "text": "There’s lots more!\n\n\n\nand also see the official site: https://allisonhorst.github.io/palmerpenguins/"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#what-we-want-to-do-during-this-course",
+    "href": "slides/01-01-intro/index.html#what-we-want-to-do-during-this-course",
+    "title": "Introduction",
+    "section": "What we want to do during this course",
+    "text": "What we want to do during this course\n\nGeneral overview of linear models\nProbability distributions\nFrequentist and Bayesian approaches\nGLMMs for different kinds of data"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#quick-personal-introduction",
+    "href": "slides/01-01-intro/index.html#quick-personal-introduction",
+    "title": "Introduction",
+    "section": "Quick personal introduction",
+    "text": "Quick personal introduction\n\n\n\nField ecologist turned statistican\nstarted off in insect-plant interactions, has now done:\n\nfish populations\nkangaroo life history\nfly mating behaviour\nanimal personality\n\nMostly a Bayesian"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#frequentist-vs-bayes-rival-stastical-paradigms",
+    "href": "slides/01-01-intro/index.html#frequentist-vs-bayes-rival-stastical-paradigms",
+    "title": "Introduction",
+    "section": "Frequentist vs Bayes: “Rival” stastical paradigms?",
+    "text": "Frequentist vs Bayes: “Rival” stastical paradigms?"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#course-resources",
+    "href": "slides/01-01-intro/index.html#course-resources",
+    "title": "Introduction",
+    "section": "Course resources",
+    "text": "Course resources\nBooks I find useful:\n\nHobbs & Hooten\nMcElreath\nGelman et al.\nQuinn and Keough"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#rethinking",
+    "href": "slides/01-01-intro/index.html#rethinking",
+    "title": "Introduction",
+    "section": "rethinking",
+    "text": "rethinking\n\nA good portion of this course material is based on this book."
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#bayesian-data-analysis",
+    "href": "slides/01-01-intro/index.html#bayesian-data-analysis",
+    "title": "Introduction",
+    "section": "Bayesian Data Analysis",
+    "text": "Bayesian Data Analysis\n\nEverything is there but it can gets technical !"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#course-datasets",
+    "href": "slides/01-01-intro/index.html#course-datasets",
+    "title": "Introduction",
+    "section": "Course datasets",
+    "text": "Course datasets\n\nPalmer Penguins\nmite data from the vegan package\nQuinn and Keough datasets"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#they-have-many-names",
+    "href": "slides/01-01-intro/index.html#they-have-many-names",
+    "title": "Introduction",
+    "section": "They have many names:",
+    "text": "They have many names:\nHierarchical models, AKA:\n\nRandom effect models\nMixed models\nMultilevel models\nVariance component models\nError component models"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#some-examples-of-linear-models-in-ecology",
+    "href": "slides/01-01-intro/index.html#some-examples-of-linear-models-in-ecology",
+    "title": "Introduction",
+    "section": "Some examples of linear models in Ecology:",
+    "text": "Some examples of linear models in Ecology:\n\na randomized block design\nBACI - pre-treatment variable\ngrowth over time\nfactorial designs"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#discussion-what-models-have-you-used-in-the-past",
+    "href": "slides/01-01-intro/index.html#discussion-what-models-have-you-used-in-the-past",
+    "title": "Introduction",
+    "section": "Discussion: What models have you used in the past?",
+    "text": "Discussion: What models have you used in the past?"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#structure-of-linear-models",
+    "href": "slides/01-01-intro/index.html#structure-of-linear-models",
+    "title": "Introduction",
+    "section": "Structure of linear models",
+    "text": "Structure of linear models"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#linear-models-but-in-math",
+    "href": "slides/01-01-intro/index.html#linear-models-but-in-math",
+    "title": "Introduction",
+    "section": "Linear models – but in math",
+    "text": "Linear models – but in math\n\\[\n\\begin{align}\ny &= ax + b\n\\end{align}\n\\]"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#linear-models-but-in-math-1",
+    "href": "slides/01-01-intro/index.html#linear-models-but-in-math-1",
+    "title": "Introduction",
+    "section": "Linear models – but in math",
+    "text": "Linear models – but in math\n\\[\n\\begin{align}\ny &\\sim \\text{Normal}(\\bar{y}, \\sigma) \\\\\n\\bar{y} &= ax + b \\\\\n\\end{align}\n\\]\n\nThere are three numbers in a straight line (easy to forget!)"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#linear-models-but-in-math-2",
+    "href": "slides/01-01-intro/index.html#linear-models-but-in-math-2",
+    "title": "Introduction",
+    "section": "Linear models – but in math",
+    "text": "Linear models – but in math\n\\[\n\\begin{align}\ny &\\sim \\text{Normal}(\\bar{y}, \\sigma) \\\\\n\\bar{y} &= \\textbf{X} \\beta_1 + b_0 \\\\\n\\end{align}\n\\]"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#bayesian-statistics-vs-frequentist",
+    "href": "slides/01-01-intro/index.html#bayesian-statistics-vs-frequentist",
+    "title": "Introduction",
+    "section": "Bayesian statistics vs Frequentist",
+    "text": "Bayesian statistics vs Frequentist"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#frequentist-approach",
+    "href": "slides/01-01-intro/index.html#frequentist-approach",
+    "title": "Introduction",
+    "section": "Frequentist approach",
+    "text": "Frequentist approach\n\nMaximum likelihood – finding parameter values that make the data most likely to have happened.\nHypothesis testing: if the data are more extreme than we would observe 1/20 times if the null were true, then we assume that the null is NOT true."
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#bayesian-approach",
+    "href": "slides/01-01-intro/index.html#bayesian-approach",
+    "title": "Introduction",
+    "section": "Bayesian approach",
+    "text": "Bayesian approach\nLooking for the joint probability of the parameters given the data.\n\\[\n[\\theta|\\text{data}] = \\frac{[\\text{data}|\\theta] \\times [\\theta]}{[\\text{data}]}\n\\]\n\nusing Bayes Rule does not make you a Bayesian. Using probability as a measure of uncertainty makes you a Bayesian"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#math-explanation",
+    "href": "slides/01-01-intro/index.html#math-explanation",
+    "title": "Introduction",
+    "section": "Math explanation",
+    "text": "Math explanation\n$$ [a,b,| X] = \n$$\n\nHypothesis testing: asking if a parameter is well-separated from 0."
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#discussion",
+    "href": "slides/01-01-intro/index.html#discussion",
+    "title": "Introduction",
+    "section": "Discussion",
+    "text": "Discussion\n\nbefore telling you my opinion of linear models, I’d like to have a group discussion about what limitations each of US has experienced with them."
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#linear-models-strengths",
+    "href": "slides/01-01-intro/index.html#linear-models-strengths",
+    "title": "Introduction",
+    "section": "Linear models strengths",
+    "text": "Linear models strengths\n\nEasy to interpret (?)\nEasy to fit .. most of the time\nDesigned to match experiments and test specific hypotheses\nDecent approximation to natural phenomenon (c.f. Taylor expansions)"
+  },
+  {
+    "objectID": "slides/01-01-intro/index.html#linear-model-weaknesses",
+    "href": "slides/01-01-intro/index.html#linear-model-weaknesses",
+    "title": "Introduction",
+    "section": "Linear model weaknesses",
+    "text": "Linear model weaknesses\n\nEasy to OVER interpret\nDoesn’t always fit if your data aren’t suitable\noverused and uncritically used\nLinear models don’t establish causes on their own\nNature has no straight lines"
+  },
+  {
+    "objectID": "slides/03-01-multilevel-intro/index.html",
+    "href": "slides/03-01-multilevel-intro/index.html",
+    "title": "index",
+    "section": "",
+    "text": ". . .\n\nHierarchical models have been implemented in many software packages,\n\n. . .\n\nin R\n\nlme4, brms, nlme, glmmTMB, MCMCglmm, …\n\n\n. . .\n\nin SAS\n\nMIXED, HPMIXED, GLMMIX, …\n\n\n. . .\n\nin Julia\n\nMixedModels.jl\n\n…"
+  },
+  {
+    "objectID": "slides/03-01-multilevel-intro/index.html#implementation",
+    "href": "slides/03-01-multilevel-intro/index.html#implementation",
+    "title": "index",
+    "section": "",
+    "text": ". . .\n\nHierarchical models have been implemented in many software packages,\n\n. . .\n\nin R\n\nlme4, brms, nlme, glmmTMB, MCMCglmm, …\n\n\n. . .\n\nin SAS\n\nMIXED, HPMIXED, GLMMIX, …\n\n\n. . .\n\nin Julia\n\nMixedModels.jl\n\n…"
+  },
+  {
+    "objectID": "slides/03-01-multilevel-intro/index.html#a-bit-of-vocabulary",
+    "href": "slides/03-01-multilevel-intro/index.html#a-bit-of-vocabulary",
+    "title": "index",
+    "section": "A bit of vocabulary",
+    "text": "A bit of vocabulary\nMultiple Definition of fixed and random effects\n. . .\n\n(Kreft and De Leeuw 1998) Fixed effects are constant and random effect vary\n\n. . .\n\n(Searl et al. 1992) Effects are fixed if they are interesting in themselves or random if there is interest in the underlying population\n\n. . .\n\n(Green and Tukey 1960) When a sample exhausts the population, the corresponding variable is fixed; when the sample is a small (i.e., negligible) part of the population the corresponding variable is random\n\n. . .\n\n(Roy LaMotte 2014) If an effect is assumed to be a realized value of a random variable, it is called a random effect\n\n. . .\n\n(Robinson 1991) Fixed effects are estimated using least squares (or, more generally, maximum likelihood) and random effects are estimated with shrinkage."
+  },
+  {
+    "objectID": "exercises/01-simulation/index.html",
+    "href": "exercises/01-simulation/index.html",
+    "title": "Introduction to Simulation for validating a model",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(lme4)\nlibrary(rstanarm)"
+  },
+  {
+    "objectID": "exercises/01-simulation/index.html#simple-exercise-in-simulation",
+    "href": "exercises/01-simulation/index.html#simple-exercise-in-simulation",
+    "title": "Introduction to Simulation for validating a model",
+    "section": "Simple exercise in simulation",
+    "text": "Simple exercise in simulation\nLet’s imagine we are taking a walk as a group today at this beautiful field site. What is the number of birds (total abundance of ALL species) each of us is going to see on our hike?\n\nSome questions to ask about simulated data\n\nWhat kind of observations are you going to make? Do they have a minimum or maximum value? Are they integers, or are they decimal numbers, or something else?\nWhere do the numbers come from? This could be anything, from simple linear approximations (i.e. the models we’re looking at in this course) to ODEs, mathematical models, GAMs, etc.\nHow many observations will we be making?\n\nOne of the most useful traits of Bayesian models is that they are generative: they can be used to make a simulated dataset. We’ll do that now for our bird example.\nlet’s simulate from a Poisson distribution:\n\nset.seed(525600)\nn_people &lt;- 21\navg_birds_per_person &lt;- runif(1, min = 0, max = 30)\nbird_count &lt;- rpois(n_people, lambda = avg_birds_per_person)\n\nSome things to note in the code above:\nEvery statistical distribution that is in R (which is a lot! almost all! ) has four different functions. If the distribution is called dist, then they are:\n\nrdist = draw random numbers from dist\nqdist = the quantile function – what value gives a certain proportion of the distribution?\npdist = the probability density function – what proportion of the distribution is below a certain value?\nddist the density function = draws the “shape” of a distribution. How probable are specific values?\n\nThe other thing to note is that there are TWO simulation steps here: first, simulating a value of the average (\\(\\lambda\\)) and second, simulating observations. In our model, the Uniform distribution was referred to as the prior, and the Poisson distribution was referred to as a likelihood, but here you can see that they are very nearly the same thing: just statements about what distribution of values might be most consistent with the data.\n\nPlotting the result\nLet’s take a look at our simulated values:\n\nhist(bird_count, col = \"lightblue\", xlim = c(0, 50))\n\n\n\n\nHistogram of simulated counts of birds\n\n\n\n\nThis is pretty great, and represents one possible realization of sampling. However, one sample isn’t enough to tell us about what our \\(\\text{Uniform}(0, 60)\\) prior really means.\n\n\n\n\n\n\nEXERCISE\n\n\n\nTry to make many different simulations (say, 12 simulations). This represents 12 different repeats of the whole process: draw a value from the uniform prior, THEN draw a value from the poisson. Visualize them any way you want! (the worked example below uses ggplot2)\n\n\n\n\n\n\n\n\nSOLUTION\n\n\n\n\n\n\nset.seed(525600)\n\nsimulate_some_birds &lt;- function() {\n  lambda &lt;- runif(1, min = 0, max = 60)\n  tibble(birds_seen = rpois(23, lambda = lambda),\n         lambda = lambda)\n}\n\nbird_simulations &lt;- purrr::map(1:12, function(x) simulate_some_birds()) |&gt; \n  list_rbind(names_to = \"simulation_id\")\n  \n\nbird_simulations |&gt; \n  ggplot(aes(x = birds_seen)) + \n  geom_histogram(bins = 28) + \n  facet_wrap(~simulation_id) + \n  theme_bw() + \n  labs(x = \"Number of birds observed per person\")\n\n\n\n\nTwelve different simulations of a possible bird dataset. Do all of these seem plausible?\n\n\n\n\n\n\n\nThis figure shows different simulations of what, according to our prior, might be reasonable datasets for us to study. Do any of them seem implausible to you? If so, try changing the prior. The goal is to make fake datasets that seem plausible, but which still include the possibility of some surprising observations.\nWhen you have a prior that generates observations that cover a range of scientifically reasonable values, then you are ready to move on to fitting real data.\nAnd then translate it into rstanarm.\n\n\n\nThe model formula\nBoth lme4 and rstanarm use the same classic R formula syntax:\nbirds_seen ~ 1\nWe’re using ~ 1 because our model is very simple, requiring only an intercept.\nBecause it is a Poisson distribution, we also specify the response distribution here, via the family argument.\n\n\nrstanarm code for prior simulation\n\n## make the dataset\nbird_simulation &lt;- data.frame(bird_count = bird_count)\n\nbird_model &lt;- stan_glm(bird_count ~ 1, \n                       family = poisson(link = \"identity\"),\n                       data = bird_simulation,\n                       refresh = 0L,\n                       ## PRIOR ONLY\n                       prior_PD = TRUE,\n                       prior_intercept = normal(location = 30, scale = 10)\n)\n\nbird_model\n\nstan_glm\n family:       poisson [identity]\n formula:      bird_count ~ 1\n observations: 21\n predictors:   1\n------\n            Median MAD_SD\n(Intercept) 30.5   10.0  \n\n------\n* For help interpreting the printed output see ?print.stanreg\n* For info on the priors used see ?prior_summary.stanreg\n\nprior_summary(bird_model)\n\nPriors for model 'bird_model' \n------\nIntercept (after predictors centered)\n ~ normal(location = 30, scale = 10)\n------\nSee help('prior_summary.stanreg') for more details\n\n\n\n\nSampling a prior in rstanarm\nSimulating from a prior is so essential that many Bayesian tools allow you to do this directly.\nWhen we run stan_glm, with prior_PD = TRUE, we sample only from the prior. This generates a large number of simulated datasets – the default is 4000! Each time the model samples, it draws a new value for the unobserved average (avg_birds_per_person) and then 22 values for the number of birds seen by each person.\nLet’s pull out just a few of these datasets and visualize them.\nWe’ll use a wonderful package called tidybayes to easily extract posterior draws from the result of rstanarm.\n\nbird_counts_simulated &lt;- tidybayes::add_predicted_draws(\n  bird_simulation, \n  bird_model)\n\nlibrary(tidybayes)\n\nbird_counts_simulated |&gt; \n  ungroup() |&gt; \n  filter(.draw %in% sample(1:4000, replace = FALSE, size = 16)) |&gt;   \n  ggplot(aes(x = .prediction)) + \n  geom_dotplot() + \n  facet_wrap(~.draw)\n\nBin width defaults to 1/30 of the range of the data. Pick better value with\n`binwidth`.\n\n\n\n\n\nPrior simulations of bird observations"
+  },
+  {
+    "objectID": "exercises/01-simulation/index.html#parameter-recovery",
+    "href": "exercises/01-simulation/index.html#parameter-recovery",
+    "title": "Introduction to Simulation for validating a model",
+    "section": "Parameter recovery",
+    "text": "Parameter recovery\nLet’s go back and look at the fake datasets we created in R\n\navg_birds_per_person\n\n[1] 17.12789\n\nbird_count\n\n [1] 23 10 19 27 20 15 16 18 18 22 14 14 14 18 17 13 26 19 16 13 10\n\n\nand let’s see if we can recapture the only known parameter, avg_birds_per_person, which is equal to 17.127887.\nWe’ll do it first in R, using the function fitdistr from the MASS package:\n\nMASS::fitdistr(bird_count, dpois, start = list(lambda=10))\n\nWarning in stats::optim(x = c(23L, 10L, 19L, 27L, 20L, 15L, 16L, 18L, 18L, : one-dimensional optimization by Nelder-Mead is unreliable:\nuse \"Brent\" or optimize() directly\n\n\n     lambda  \n  17.2382812 \n ( 0.9060239)\n\n\nThis could also be done with glm\n\nbird_glm &lt;- glm(bird_count ~ 1, family = \"poisson\")\nexp(coef(bird_glm))\n\n(Intercept) \n    17.2381 \n\n\nYou can see that in all cases we are getting close to the value of avg_birds_per_person, which in these simulations is the true value."
+  },
+  {
+    "objectID": "exercises/01-simulation/index.html#parameter-recovery-in-rstanarm-sampling-the-posterior",
+    "href": "exercises/01-simulation/index.html#parameter-recovery-in-rstanarm-sampling-the-posterior",
+    "title": "Introduction to Simulation for validating a model",
+    "section": "Parameter recovery in rstanarm – sampling the posterior",
+    "text": "Parameter recovery in rstanarm – sampling the posterior\nTime for the HMC Slides!\n\n\n\n\n\n\nEXERCISE: parameter recovery in Stan\n\n\n\nUse the Stan code above to fit the model to our simulated data. Do we recover the parameters? That is, rerun the example above but change the prior_PD argument to “FALSE”\n\n\n\n\n\n\nSOLUTION\n\n\n\n\n\nthe brms syntax is only slightly changed! note the different filename and the different object name as well:\n\nbird_posterior &lt;- stan_glm(bird_count ~ 1, \n                       family = poisson(link = \"identity\"),\n                       data = bird_simulation,\n                       refresh = 0L,\n                       ## PRIOR ONLY\n                       prior_PD = FALSE,\n                       prior_intercept = normal(location = 30, scale = 10)\n)\n\nsummary(bird_posterior)\n\n\nModel Info:\n function:     stan_glm\n family:       poisson [identity]\n formula:      bird_count ~ 1\n algorithm:    sampling\n sample:       4000 (posterior sample size)\n priors:       see help('prior_summary')\n observations: 21\n predictors:   1\n\nEstimates:\n              mean   sd   10%   50%   90%\n(Intercept) 17.4    0.9 16.2  17.4  18.6 \n\nFit Diagnostics:\n           mean   sd   10%   50%   90%\nmean_PPD 17.4    1.3 15.8  17.4  19.0 \n\nThe mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help('summary.stanreg')).\n\nMCMC diagnostics\n              mcse Rhat n_eff\n(Intercept)   0.0  1.0  1352 \nmean_PPD      0.0  1.0  2146 \nlog-posterior 0.0  1.0   986 \n\nFor each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1)."
+  },
+  {
+    "objectID": "exercises/01-simulation/index.html#exercises",
+    "href": "exercises/01-simulation/index.html#exercises",
+    "title": "Introduction to Simulation for validating a model",
+    "section": "Exercises",
+    "text": "Exercises\n\nLevel 1\n\nWhat would you do next to add complexity the bird-counting model above?\nWe plotted histograms to evaluate our model. Experiment with other types of plots. For example, what is the maximum value in each posterior simulation? What is the minimum? How to these compare to the real data? TIP: check out ?bayesplot::`PPC-overview`\n\n\n\nLevel 2\n\nTry to fit YOUR data to this model!. Check to see if the distribution you chose is implemented in Stan – see, for example, this list.\nCheck your model using the plots we have already seen today.\n\n\n\nLevel 3\n\nYou would never actually do the analysis in this exercise! If all you want is the average of a Poisson distribution, you can get that without any sampling at all. Start by writing the model with a different prior:\n\n\\[\n\\begin{align}\n\\text{Number of Birds}_{\\text{seen by person i}} &\\sim \\text{Poisson}(\\lambda) \\\\\n\\lambda &\\sim \\text{Gamma}(9, .5)\n\\end{align}\n\\]\nThis lets us calculate the posterior distribution directly. See the equation on Wikipedia and calculate the posterior for our bird data."
+  },
+  {
+    "objectID": "exercises/01-simulation/index.html#footnotes",
+    "href": "exercises/01-simulation/index.html#footnotes",
+    "title": "Introduction to Simulation for validating a model",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nin Andrew’s experience anyway!↩︎"
+  },
+  {
+    "objectID": "exercises/01-simulation/index.html#visualize-everything",
+    "href": "exercises/01-simulation/index.html#visualize-everything",
+    "title": "Introduction to Simulation for validating a model",
+    "section": "Visualize everything!",
+    "text": "Visualize everything!\nBayesian workflows are highly visual. Make as many plots as you can: of your parameters, your predictions, the performance of your chains, etc.\nAnother essential package for working with posterior samples is called bayesplot. Let’s use it to compare the posterior and prior distribution for the intercept.\n\n# tidybayes::get_variables(bird_posterior)\n\nbayesplot::mcmc_areas(bird_posterior) + \n  geom_vline(xintercept = avg_birds_per_person, col = \"orange\", lwd = 2)\n\n\n\n\nposterior distribution for avg_birds_per_person. The orange line is the true parameter value, which we simulated in R.\n\n\n\n\n\nPosterior predictive checks\nBayesian models MAKE data, which suggests a clear way to validate our models: ask the model to make some data, then see how well these data correspond to biology (e.g. to our real data). Here, we will take 50 fake datasets of bird counts and compare them to the simulation we first did in R.\nThe process involves a bit of fiddling around in R to get the simulated data, but then bayesplot does all the work:\n\nrstanarm::pp_check(bird_posterior, plotfun = \"dens_overlay\")\n\n\n\n\n\n\n\n\n\n\nShinystan\n\nshinystan::launch_shinystan(bird_posterior)"
+  }
+]

@@ -1,0 +1,55 @@
+---
+title: "Model building with Simulation"
+author: "Andrew MacDonald"
+format: revealjs
+---
+
+## Simulation can change your science
+
+If you can't simulate from a model, you do not understand it
+
+## Simulation recipie
+
+-   write down your statistical model
+
+-   for each unknown variable: Assign priors (if you're Bayesian) or pick a plausible value (if you're frequentist)
+
+-   treat those values like the truth and make a fake dataset with them
+
+-   take this fake dataset and fit the *very same model* back to these values
+
+-   see if the models estimates are close to the truth
+
+## Why do this
+
+-   the MINIMUM test of a model's ability is its ability to recover these known parameters
+
+-   in reality we DON'T know the true model, but we can hope!
+
+## Exercise together -- simulate for a regression
+
+## Solo exercise -- simulate for a regression with two predictors
+
+-   should we use the Penguin data actually? have something simple.
+
+## Simulating for factors
+
+-   need to consider the contrast matrix that we use for the model
+
+-   there are several forms to consider!
+
+## Discussion -- think about YOUR design
+
+## Plotting to understand models
+
+We've already seen the power of a simulation and plots to understand the model BEFORE we run it.
+
+Let's examine plots to understand models AFTER we have run a model.
+
+## Prediction vs expectation
+
+There are two kinds of predictions we can make for a simple model:
+
+-   **What does the model think is the average response**: this is called the "fitted" or "expected" value.
+
+-   **What kind of observations might we make in the future?** : these are called predicted observations.
