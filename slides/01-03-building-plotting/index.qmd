@@ -108,21 +108,12 @@ These data were collected from 2007 to 2009 by Dr. Kristen Gorman with the *Palm
 The data were imported directly from the Environmental Data Initiative (EDI) Data Portal, and are available for use by CC0 license ("No Rights Reserved") in accordance with the Palmer Station Data Policy. [@gorman2014; @horst2020]
 :::
 
-## A handy dataset of three groups
-
-```{r penguinpairs, echo=FALSE}
-library(ggplot2)
-library(dplyr)
-penguins %>%
-  select(species, body_mass, starts_with("bill")) %>% 
-  GGally::ggpairs(aes(color = species)) +
-  scale_colour_manual(values = c("darkorange","purple","cyan4")) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"))
-```
+https://allisonhorst.github.io/palmerpenguins/
 
 ## Behold: Simpson's Paradox!
 
 ```{r echo=FALSE}
+suppressPackageStartupMessages(library(tidyverse))
 bill_len_dep <- ggplot(data = penguins,
                          aes(x = bill_len,
                              y = bill_dep,
