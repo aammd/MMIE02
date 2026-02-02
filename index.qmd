@@ -4,7 +4,9 @@ title: "MMIE02: Mixed Methods in Ecology"
 
 ## Monday 02 Feb
 
-* [What is a Linear Model?](slides/01-01-intro/)
-* [The importance of simulation for validating models](slides/01-02-simulation/) 
-* [simulation exercise](exercises/01-simulation/)
-* [Intro to some useful datasets](slides/01-03-building-plotting/)
+-   [What is a Linear Model?](slides/01-01-intro/)
+<!-- -   [The importance of simulation for validating models](slides/01-02-simulation/) -->
+-   [Intro to some useful datasets](slides/01-03-building-plotting/)
+-   [Linear models in more detail](slides/01-04-Linear_model/)
+-   [Probability distributions](https://aammd.github.io/brms_bbme/slides/02_5_Distribution/#/title-slide)
+-   [simulation exercise](exercises/01-simulation/)
