@@ -17,7 +17,8 @@ In this section we're going to look at a simple model with a single predictor va
 
 ```{r}
 library(tidyverse)
-suppressPackageStartupMessages(library(brms))
+library(rstanarm)
+library(lme4)
 library(tidybayes)
 ```
 
@@ -52,42 +53,61 @@ $$
 \end{align}
 $$
 
-let's express the same model in brms:
+### Prior predictive simulation (using rstanarm)
 
 ```{r}
-## formula
-bill_bf <- bf(bill_dep ~ 1, family = gaussian())
-## prior
-get_prior(bill_bf, data = penguins_noNAbill)
-bill_prior <- c(
-  prior(normal(17, 2), class = "Intercept"),
-  prior(exponential(.5), class = "sigma", lb = 0)
+bill_stan_PD <- stan_glm(
+  bill_dep ~ 1,
+  data = penguins_noNAbill,
+  family = gaussian(),
+  prior_intercept = normal(17, 2),
+  prior_aux = exponential(1),
+  prior_PD = TRUE,
+  chains = 4,
+  iter = 2000,
+  refresh = 0,
+  seed = 525600
 )
-bill_prior
-## fit
 
-bill_brm <- brm(bill_bf, 
-                data = penguins_noNAbill, 
-                prior = bill_prior,
-                sample_prior = "yes",
-                refresh = 0L,
-                file = here::here("topics/discrete_predictor/bill_brm.rds"), 
-                file_refit = "on_change")
-
-bill_brm
+bill_stan_PD
 ```
+
+
+```{r}
+#| fig-cap: prior predictive simulations of penguin bills
+pp_check(bill_stan_PD, nreps = 20)
+```
+
 
 Some things to notice about the process and results above:
 
 -   similar to yesterday's example, we've fit a univariate model to these data. However, because it is a *gaussian* model, it requires two parameters: a mean and a standard deviation.
 -   although the priors are close to a visual inspection of the histogram, the assumption here is that the prior parameters come from expertise or prior simulations, NOT from looking at the data before modelling!
--   note that we have not tried to drop NA values, but brms has done it on its own and warned us.
 
 We can use the [`posterior` package](https://mc-stan.org/posterior/) to extract and conveniently summarize the draws from the distribution.
 
+## Fit the model
+
+Now we can fit the model directly in rstanarm and look at the results:
+
 ```{r}
-## summarize the samples for each parameter into a nice table
-bill_brm |> 
+bill_stan <- stan_glm(
+  bill_dep ~ 1,
+  data = penguins_noNAbill,
+  family = gaussian(),
+  prior_intercept = normal(17, 2),
+  prior_aux = exponential(0.5),
+  chains = 4,
+  iter = 2000,
+  refresh = 0,
+  seed = 525600
+)
+
+bill_stan
+```
+
+```{r}
+bill_stan |> 
   posterior::summarise_draws() |> 
   knitr::kable()
 ```
@@ -101,23 +121,52 @@ We can look at the distributions easily using the `bayesplot` package.
 ```{r}
 #| layout-ncol: 2
 
-bayesplot::mcmc_hist(bill_brm, pars = "Intercept")  + 
+bayesplot::mcmc_hist(bill_stan, pars = "(Intercept)")  + 
   coord_cartesian(xlim = c(15, 20))
-bayesplot::mcmc_hist(bill_brm, pars = "sigma") + 
+bayesplot::mcmc_hist(bill_stan, pars = "sigma") + 
   coord_cartesian(xlim = c(0, 4))
 ```
 
-Notice that the distributions do not have the same shape as the prior-- this is particularly true for $\sigma$.
+Notice that the distributions do not have the same shape as the prior-- this is particularly true for $\sigma$:
+
+```{r}
+post_draws <- posterior::as_draws_df(bill_stan)
+set.seed(525600)
+ndraws <- nrow(post_draws)
+
+prior_draws <- tibble(
+  Intercept = rnorm(ndraws, mean = 17, sd = 2),
+  sigma     = rexp(ndraws, rate = 0.5)
+)
+
+combined_draws <- post_draws |>
+  transmute(
+    Intercept = `(Intercept)`,
+    sigma = sigma,
+    prior_Intercept = prior_draws$Intercept,
+    prior_sigma     = prior_draws$sigma
+  )
+
+```
+
 
 ```{r}
 #| layout-ncol: 2
+#| fig-cap: comparisons of priors and posteriors for two parameters, showing how much we've learned from the data.
 
-bayesplot::mcmc_hist(bill_brm, pars = c("Intercept", "prior_Intercept"))  + 
+bayesplot::mcmc_hist(
+  combined_draws,
+  pars = c("Intercept", "prior_Intercept")
+) +
   coord_cartesian(xlim = c(10, 25))
 
 
-bayesplot::mcmc_hist(bill_brm, pars = c("sigma", "prior_sigma"))  + 
+bayesplot::mcmc_hist(
+  combined_draws,
+  pars = c("sigma", "prior_sigma")
+) +
   coord_cartesian(xlim = c(0, 6))
+
 
 ```
 
@@ -139,13 +188,15 @@ Here is the procedure for generating posterior predictions:
 
 ```{r}
 # just get some draws
-draws_matrix <- posterior::as_draws_matrix(bill_brm)
+draws_matrix <- posterior::as_draws_matrix(bill_stan)
 
 ## set up a matrix. for every posterior sample, 
 ## (that is, for a value of mu and a value of sigma) 
 ## draw a whole fake dataset from a normal distribution with that mean and sd. 
 nsamples <- 50
-yrep <- matrix(0, ncol = length(penguins_noNAbill$bill_dep), nrow = nsamples)
+yrep <- matrix(0, 
+               ncol = length(penguins_noNAbill$bill_dep), 
+               nrow = nsamples)
 
 # pick some random rows
 set.seed(1234)
@@ -157,7 +208,7 @@ subset_draws <- draws_matrix[chosen_samples,]
 
 for (r in 1:nsamples){
  yrep[r,] <- rnorm(n = length(penguins_noNAbill$bill_dep), 
-                   mean = subset_draws[r, "Intercept"], 
+                   mean = subset_draws[r, "(Intercept)"], 
                    sd = subset_draws[r, "sigma"])
 }
 
@@ -166,10 +217,10 @@ bayesplot::ppc_dens_overlay(y = penguins_noNAbill$bill_dep,
 
 ```
 
-This is the manual approach, which demonstrates the entire process explicitly. However, thanks to the power of brms, this can also be accomplished in a single line:
+This is the manual approach, which demonstrates the entire process explicitly. However, thanks to the power of rstanarm, this can also be accomplished in a single line:
 
 ```{r}
-brms::pp_check(bill_brm, type = "dens_overlay", ndraws = 50)
+pp_check(bill_stan, ndraws = 50)
 ```
 
 ::: callout-tip
@@ -178,7 +229,7 @@ brms::pp_check(bill_brm, type = "dens_overlay", ndraws = 50)
 Look at the other graphical posterior predictive checks available in the `bayesplot` package by examining [the vignette](https://mc-stan.org/bayesplot/articles/graphical-ppcs.html). Experiment with some different possibilities for these data.
 :::
 
-The posterior predictive distribution gives us a straightfoward way to test our model's performance:
+The posterior predictive distribution gives us a straightforward way to test our model's performance:
 
 1.  we use the model to generate fake observations.
 2.  plot these on top of the real data
@@ -245,11 +296,6 @@ df_of_means |>
 
 ```
 
-## Vector indexing in Stan
-
-We can use this very same technique in Stan:
-
-The only difference to the previous model is in the line with the for-loop, which is now replaced with a vectorized expression. This is faster to write and will run faster in Stan. However it's not possible in every case.
 :::
 
 ### Sampling the species model
@@ -257,41 +303,35 @@ The only difference to the previous model is in the line with the for-loop, whic
 ::: callout-tip
 ### EXERCISE
 
-Fit one the species-specific model above using brms. TIP: set the formula to be `bill_dep ~ 0 + species`. 1. What changes do you need to make to the prior? 2. Visualize the posterior with `bayesplot`. Does it look better than the model without species? How can you tell?
+Fit one the species-specific model above using rstanarm. TIP: set the formula to be `bill_dep ~ 0 + species`. 
+1. What changes do you need to make to the prior? 
+2. Visualize the posterior with `bayesplot`. Does it look better than the model without species? How can you tell?
 :::
 
 ::: {.callout-note collapse="true"}
 ### SOLUTION
 
 ```{r}
-## formula
-bill_spp_bf <- bf(bill_dep ~ 0 + species, family = gaussian())
-## prior
-get_prior(bill_spp_bf, data = penguins_noNAbill)
-bill_spp_prior <- c(
-  prior(normal(17, 2), class = "b"),
-  prior(exponential(.5), class = "sigma", lb = 0)
+bill_spp_stan <- stan_glm(
+  bill_dep ~ 0 + species,
+  data = penguins_noNAbill,
+  family = gaussian(),
+  prior = normal(17, 2),
+  prior_aux = exponential(0.5),
+  chains = 4,
+  iter = 2000,
+  refresh = 0,
+  seed = 525600
 )
-bill_spp_prior
-## fit
 
-bill_spp_brm <- brm(bill_spp_bf, 
-                data = penguins_noNAbill, 
-                prior = bill_spp_prior,
-                sample_prior = "yes",
-                refresh = 0L,
-                file = here::here("topics/discrete_predictor/bill_spp_brm.rds"), 
-                file_refit = "on_change")
-
-bill_spp_brm
+bill_spp_stan
 ```
 
-and we can repeat the posterior checking from before:
+We can repeat the posterior checking from before:
 
 ```{r}
 # Posterior predictive check
-brms::pp_check(bill_spp_brm, type = "dens_overlay", ndraws = 50)
-
+brms::pp_check(bill_spp_stan, type = "dens_overlay", ndraws = 50)
 ```
 
 The predicted distribution is now much more like the real data!
@@ -299,7 +339,6 @@ The predicted distribution is now much more like the real data!
 
 #### Further questions & challenges
 
--   This model assumes that the $\sigma$ parameter is the same for all three species. Can you relax that assumption?
 -   I recommended that you remove the intercept from the model using `bill_dep ~ 0 + species`. What changes if you put it back in? why?
 
 ### Visualizing species -- using `tidybayes`
@@ -312,9 +351,9 @@ library(tidybayes)
 penguins_noNAbill |> 
   select(species) |> 
   distinct() |> 
-  tidybayes::add_predicted_rvars(bill_spp_brm, ndraws = 100) |> 
-  ggplot(aes(xdist = .prediction, y = species, fill = species)) + 
-  stat_slab()
+  add_predicted_draws(bill_spp_stan, ndraws = 100) |> 
+  ggplot(aes(x = .prediction, y = species, fill = species)) + 
+  stat_halfeye()
 ```
 
 We can visualize the uncertainty in predicted values AND in group means :
@@ -324,10 +363,10 @@ grid <- penguins_noNAbill %>%
   modelr::data_grid(species)
 
 means <- grid %>%
-  add_epred_draws(bill_spp_brm)
+  add_epred_draws(bill_spp_stan)
 
 preds <-  grid %>%
-  add_predicted_draws(bill_spp_brm)
+  add_predicted_draws(bill_spp_stan)
 
 penguins_noNAbill %>%
   ggplot(aes(y = species, x = bill_dep)) +
@@ -347,7 +386,7 @@ penguins_noNAbill %>%
 
 #### Level 2
 
--   generate some random groups of your own, with known means. How well does the model fit these data
+-   generate some random groups of your own, with known means. How well does the model fit these data?
 
 #### Level 3
 

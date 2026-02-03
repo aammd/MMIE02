@@ -10,3 +10,8 @@ title: "MMIE02: Mixed Methods in Ecology"
 -   [Linear models in more detail](slides/01-04-Linear_model/)
 -   [Probability distributions](https://aammd.github.io/brms_bbme/slides/02_5_Distribution/#/title-slide)
 -   [simulation exercise](exercises/01-simulation/)
+
+## Tuesday 03 Feb
+
+* [Discrete predictors](exercises/discrete_predictor)
+* [Linear regression](exercises/02_regression)
