@@ -1,0 +1,486 @@
+---
+title: "Univariate regression"
+description: |
+  The shortest route to science is a straight line.
+execute:
+  freeze: true
+comments:
+  hypothesis: true
+format:
+  html:
+    code-tools: true
+editor_options: 
+  chunk_output_type: console
+---
+
+## Load packages and data
+
+```{r}
+library(ggplot2)
+suppressPackageStartupMessages(library(dplyr))
+library(tidybayes)
+suppressPackageStartupMessages(library(rstanarm))
+```
+
+## Statistical models of Penguin bill morphology.
+
+We'll be studying the relationship between two numbers about penguin bills. Specifically, we'll ask **"Are longer bills also deeper?"**. This question might not be the most interesting ecologically, but it is a great chance to practice some interesting stats.
+
+Let's begin with plotting the data:
+
+```{r}
+#| fig-cap: Bill depth (mm) as predicted by bill length (mm) across the entire `palmerpenguins` dataset.
+penguins |> 
+  ggplot(aes(x = bill_len, y = bill_dep)) + 
+  geom_point() + 
+  stat_smooth(method = "lm")
+```
+
+Let's write a simple statistical model for these data:
+
+$$
+\begin{align}
+\text{Bill depth}_i &\sim \text{Normal}(\mu_i, \sigma) \\
+\mu_i &= \beta_0 + \beta_1\times\text{Bill length}_i \\
+\beta_0 &\sim \text{Normal}(??) \\
+\beta_1 &\sim \text{Normal}(??) \\
+\sigma &\sim \text{Exponential}(??)
+\end{align}
+$$
+
+What should our priors be? Before we can answer that, we have a more important question:
+
+::: callout-warning
+# WHERE IS ZERO??
+
+It has to be somewhere. Does it make sense? take control and choose for yourself.
+:::
+
+If we fit a model like this **without** thinking about the location of zero, we get some pretty silly answers:
+
+```{r}
+coef(lm(bill_dep ~ bill_len, data = penguins))
+```
+
+When the value of bill length is 0, the average of the response is the intercept:
+
+$$
+\begin{align}
+\mu_i &= \beta_0 + \beta_1\times\text{Bill length}_i \\
+\mu_i &= \beta_0 + \beta_1\times0 \\
+\mu_i &= \beta_0 \\
+\end{align}
+$$
+
+But, if we take the data as we found it, we're going to be talking about $\beta_0$ as the depth of a penguin's bill *when the bill has 0 length!* Clearly that isn't a very meaningful value. From the point of view of setting priors and interpreting coefficients, it helps a lot to set a meaningful 0.
+
+A very common choice is to **subtract the average** from your independent variable, so that penguins with an average bill length now have an average of 0:
+
+$$
+\begin{align}
+\text{Bill depth}_i &\sim \text{Normal}(\mu_i, \sigma) \\
+\mu_i &= \beta_0 + \beta_1\times(\text{Bill length}_i  - \overline{\text{Bill length}})\\
+\beta_0 &\sim \text{Normal}(??) \\
+\beta_1 &\sim \text{Normal}(??)
+\end{align}
+$$
+
+Now $\beta_0$ means the average *bill depth* at the average *bill length*. It becomes easier to think about priors:
+
+$$
+\begin{align}
+\text{Bill depth}_i &\sim \text{Normal}(\mu_i, \sigma) \\
+\mu_i &= \beta_0 + \beta_1\times(\text{Bill length}_i  - \overline{\text{Bill length}})\\
+\beta_0 &\sim \text{Normal}(17,2) \\
+\beta_1 &\sim \text{Normal}(0,.5) \\
+\sigma &\sim \text{Exponential}(0.5)
+\end{align}
+$$
+
+::: callout-note
+## Exercise
+
+What continuous predictors have you used in your analysis? How would you find a biologically meaningful zero? Think about how you would center time, age, mass, fitness etc.
+:::
+
+## Prior predictive simulations
+
+Armed with this model, it becomes much easier to think about prior predictions.
+
+We'll make a bunch of lines implied by the equation above. There's two steps:
+
+1.  Center the predictor
+2.  Make up a vector that goes from the minimum to the maximum of the predictor. This is just for convenience!
+
+```{r}
+bill_len_centered <- with(penguins,
+                          bill_len - mean(bill_len,
+                                                na.rm = TRUE))
+
+## make up a short vector
+some_bill_lengths <- seq(
+  from = min(bill_len_centered, na.rm = TRUE), 
+  to = max(bill_len_centered, na.rm = TRUE),
+  length.out = 10
+  )
+```
+
+::: callout-warning
+## Shortcuts to these common tasks
+
+These tasks are so common that they are automated in helper functions.
+
+For centering predictors, see the base R function `?scale` (however, doing this by hand is often more convenient)
+
+For creating a short vector over the range of a predictor, see `modelr::seq_range`. The R package [`modelr`](https://modelr.tidyverse.org/) has many different functions to help with modelling.
+:::
+
+To simulate, we'll use some matrix algebra, as we saw in lecture:
+
+```{r}
+slopes <- rnorm(7, 0, .5)
+inters <- rnorm(7, 17, 2)
+
+X <- cbind(1, some_bill_lengths)
+B <- rbind(inters, slopes)
+
+knitr::kable(head(X))
+knitr::kable(head(B))
+
+
+prior_mus <- X %*% B
+
+matplot(x = some_bill_lengths,
+        y = prior_mus, type = "l")
+```
+
+::: callout-note
+## Exercise
+
+Copy the code above. Increase the number of simulations. Which priors are too wide? Which are too narrow?
+:::
+
+### Simulating Observations
+
+There are always at least TWO kinds of predictions we can be thinking about:
+
+1.  Predicted averages. This is often called a "confidence" interval for a regression line.
+2.  Predicted observations. This is often called a "prediction" interval.
+
+We can use the full model to simulate observations!
+
+```{r}
+slopes <- rnorm(7, 0, .5)
+inters <- rnorm(7, 17, 2)
+sigmas <- rexp(7, rate = 0.3)
+
+X <- cbind(1, some_bill_lengths)
+B <- rbind(inters, slopes)
+
+prior_mus <- X %*% B
+
+prior_obs <- matrix(0, nrow = nrow(prior_mus), ncol = ncol(prior_mus))
+
+for (j in 1:ncol(prior_obs)) {
+  prior_obs[,j] <- rnorm(n = nrow(prior_mus),
+                         mean = prior_mus[,j],
+                         sd = sigmas[j])
+}
+
+matplot(x = some_bill_lengths,
+        y = prior_obs, type = "p")
+```
+
+Tidyverse style for those who indulge:
+
+```{r}
+tibble(
+  sim_id = 1:7,
+  slopes = rnorm(7, 0, .5),
+  inters = rnorm(7, 17, 2),
+  sigmas = rexp(7, rate = 0.2)
+  ) |> 
+  mutate(x = list(seq(from = -10, to = 10, length.out = 6))) |> 
+  rowwise() |> 
+  mutate(avg = list(x * slopes + inters),
+         obs = list(rnorm(length(avg), mean = avg, sd = sigmas)),
+         sim_id = as.factor(sim_id)) |> 
+  tidyr::unnest(cols = c("x", "avg", "obs")) |> 
+  ggplot(aes(x= x, y = avg, group = sim_id, fill = sim_id)) + 
+  geom_line(aes(colour = sim_id)) + 
+  geom_point(aes(y = obs, fill = sim_id), pch = 21, size = 3) + 
+  scale_fill_brewer(type = "qual") + 
+  scale_colour_brewer(type = "qual") + 
+  facet_wrap(~sim_id)
+
+```
+
+::: callout-tip
+### EXERCISE
+
+Pick one of the two simulations above and modify it. Here are some suggested modifications:
+
+-   Experiment with priors that are "too narrow" or "too wide".
+-   Try a different distribution than the one used
+-   Instead of bill size, imagine that we are applying this model to YOUR data. What would you change?
+:::
+
+## Linear regression in rstanarm
+
+Now we write some rstanarm code for this model. We'll begin with a simple model that has no posterior predictions:
+
+```{r}
+## get data ready
+peng_dep_len_df <- penguins |> 
+  tidyr::drop_na(bill_dep, bill_len) |> 
+  mutate(bill_len_cen = bill_len - mean(bill_len))
+
+## fit model with rstanarm
+normal_reg_stan <- stan_glm(
+  bill_dep ~ 1 + bill_len_cen,
+  data = peng_dep_len_df,
+  family = gaussian(),
+
+  # priors
+  prior = normal(0, 0.5),          # slope (bill_len_cen)
+  prior_intercept = normal(17, 2), # intercept
+  prior_aux = exponential(0.5),    # sigma
+
+  chains = 4,
+  iter = 2000,
+  refresh = 0,
+  seed = 525600
+)
+
+normal_reg_stan
+
+```
+
+get the variable names, which will show us the names of parameters we can plot later:
+
+```{r}
+tidybayes::get_variables(normal_reg_stan)
+```
+
+```{r}
+normal_reg_stan |> 
+  bayesplot::mcmc_areas(pars = c("bill_len_cen", "(Intercept)", "sigma"))
+
+p <- normal_reg_stan |> 
+  bayesplot::mcmc_areas(pars = "bill_len_cen") + 
+  coord_cartesian(xlim = c(-0.16, 0.16))  
+
+```
+
+::: callout-tip
+### EXERCISE
+
+**Discussion** : Look just at the posterior distribution of the slope right above. Do we have evidence that there's a relationship between bill length and bill depth?
+:::
+
+## Posterior predictions in R
+
+We can calculate a posterior prediction line directly in R for these data. I'll show each step in this workflow separately:
+
+```{r}
+normal_reg_stan |> 
+  tidybayes::spread_rvars(bill_len_cen, `(Intercept)`, sigma)
+```
+
+`tidybayes` helps us extract the posterior distribution of the parameters into a convenient object called an `rvar`. Learn more about tidybayes [here](http://mjskay.github.io/tidybayes/articles/tidybayes.html) and about the rvar datatype [here](https://mc-stan.org/posterior/articles/rvar.html)
+
+Next we combine these posteriors with a vector of observations to make a posterior distribution of LINES:
+
+```{r}
+
+normal_reg_predline <- normal_reg_stan |> 
+  tidybayes::spread_rvars(bill_len_cen, `(Intercept)`) |> 
+  tidyr::expand_grid(x = seq(from = -15, to = 15, length.out = 5)) |> 
+  mutate(mu = `(Intercept)` + bill_len_cen*x)
+
+normal_reg_predline
+```
+
+Finally we'll plot these:
+
+```{r}
+
+normal_reg_predline |> 
+  ggplot(aes(x = x, dist = mu)) + 
+  tidybayes::stat_lineribbon() + 
+  geom_point(aes(x = bill_len_cen, y = bill_dep),
+             inherit.aes = FALSE,
+             data = peng_dep_len_df)
+
+```
+
+The above workflow makes a nice figure, but perhaps it helps to see the individual lines to understand what is happening here. We can get these with another handy function, `unnest_rvars()`
+
+```{r}
+
+normal_reg_predline |> 
+  unnest_rvars() |> 
+  ggplot(aes(x = x, y = mu)) + 
+  # tidybayes::stat_lineribbon() +
+  geom_line(aes(group = .draw), alpha = 5/100) + 
+  geom_point(aes(x = bill_len_cen, y = bill_dep),
+             inherit.aes = FALSE,
+             data = peng_dep_len_df)
+```
+
+## Posterior predicted observations
+
+There is a SECOND kind of prediction that we can make using this line. Instead of looking at the average of the line, we look at the possible observations around the line.
+
+```{r}
+data.frame(bill_len_cen = seq(from = -15, to = 15, length.out = 5)) |> 
+  tidybayes::add_predicted_rvars(normal_reg_stan) |> 
+  ggplot(aes(x = bill_len_cen, ydist = .prediction)) + 
+  stat_lineribbon() +
+  geom_point(aes(x = bill_len_cen, y = bill_dep),
+             inherit.aes = FALSE,
+             data = peng_dep_len_df) + 
+  scale_fill_brewer(palette = "Greens", direction = -1)
+```
+
+```{r}
+summary(normal_reg_stan)
+```
+
+::: callout-tip
+### EXERCISE
+
+Extend this model to include species. Specifically, let each species have its own value of the `intercept`. This involves combining this regression example with the previous activity on discrete predictors.
+
+When you're done, look at the resulting summary of coefficients. What do you notice that's different?
+:::
+
+::: {.callout-note collapse="true"}
+### SOLUTION
+
+```{r}
+## dataset
+glimpse(peng_dep_len_df)
+
+## fit model (rstanarm)
+bill_dep_len_sp_stan <- stan_glm(
+  bill_dep ~ 0 + bill_len_cen + species,
+  data = peng_dep_len_df,
+  family = gaussian(),
+
+  prior = normal(c(17, 17, 17, 0), c(2, 2, 2, .5)),   # bill_len_cen
+  prior_intercept = NULL,
+  prior_aux = exponential(0.5),
+
+  chains = 4,
+  iter = 2000,
+  refresh = 0,
+  seed = 525600
+)
+
+bill_dep_len_sp_stan
+```
+
+
+```{r}
+tidyr::expand_grid(bill_len_cen = seq(from = -15, to = 15, length.out = 5),
+                   species = unique(peng_dep_len_df$species)) |>
+  tidybayes::add_epred_rvars(bill_dep_len_sp_stan) |>
+  ggplot(aes(x = bill_len_cen, dist = .epred, group = species)) + 
+  stat_dist_lineribbon() + 
+  facet_wrap(~species) + 
+  geom_point(aes(x = bill_len_cen, y = bill_dep), 
+             data = peng_dep_len_df, inherit.aes = FALSE)
+```
+
+```{r}
+summary(bill_dep_len_sp_stan)
+```
+:::
+
+<!-- ### Plotting posterior predictions -->
+
+<!-- Using `stat_lineribbon()`, let's plot the average and predicted intervals for this regression. -->
+
+<!-- ```{r} -->
+
+<!-- #| layout-ncol: 2 -->
+
+<!-- #| warning: false -->
+
+<!-- bill_posterior <- normal_reg_spp_post |>  -->
+
+<!--   tidybayes::spread_rvars(post_bill_dep_average[i], -->
+
+<!--                           post_bill_dep_obs[i]) |> -->
+
+<!--   mutate(bill_length = data_list_spp$pred_values[i], -->
+
+<!--          spp = data_list_spp$pred_spp_id) |>  -->
+
+<!--   mutate(spp = as.factor(levels(penguins$species)[spp])) -->
+
+<!-- bill_posterior |>  -->
+
+<!--   ggplot(aes(x = bill_length, -->
+
+<!--              ydist = post_bill_dep_average, -->
+
+<!--              fill = spp,  -->
+
+<!--              colour = spp)) +  -->
+
+<!--   tidybayes::stat_lineribbon() +  -->
+
+<!--   geom_point(aes(x = bill_length_center, -->
+
+<!--                  y = bill_depth_mm, -->
+
+<!--                  fill = species, colour = species), -->
+
+<!--              data = penguins_no_NA,  -->
+
+<!--              inherit.aes = FALSE) +    -->
+
+<!--   scale_fill_brewer(palette = "Set2") + -->
+
+<!--   scale_color_brewer(palette = "Dark2") +  -->
+
+<!--   labs(title = "Average response") -->
+
+<!-- bill_posterior |>  -->
+
+<!--   ggplot(aes(x = bill_length, -->
+
+<!--              dist = post_bill_dep_obs, -->
+
+<!--              fill = spp, -->
+
+<!--              colour = spp)) +  -->
+
+<!--   tidybayes::stat_lineribbon() +  -->
+
+<!--   geom_point(aes(x = bill_length_center, -->
+
+<!--                  y = bill_depth_mm, -->
+
+<!--                  colour = species), -->
+
+<!--              data = penguins_no_NA,  -->
+
+<!--              inherit.aes = FALSE) +  -->
+
+<!--   scale_fill_brewer(palette = "Set2") + -->
+
+<!--   scale_color_brewer(palette = "Dark2") +  -->
+
+<!--   labs(title = "Predicted observations") +  -->
+
+<!--   facet_wrap(~spp, ncol = 1) -->
+
+<!-- ``` -->
+
+## Exercise!
+
+1.  We have one model without species identity as an independent variable, and one which includes species. Look at the difference in $\sigma$ between these two models. Why did the value change?
+2.  **Posterior predictions** Compare the model with species identity to the one without it, by performing posterior predictive checks for each of them (e.g. using \``pp_check(..., type = "dens_overlay"))` ) which model do you prefer?
