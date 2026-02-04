@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Logistic GLMs: mite responses to water – MMIE02</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0769bbeb76a11e25936b389445b09cdb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">MMIE02</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#loading-models-and-data" id="toc-loading-models-and-data" class="nav-link active" data-scroll-target="#loading-models-and-data">Loading models and data</a></li>
+  <li><a href="#modelling-multiple-slopes-in-rstanarm" id="toc-modelling-multiple-slopes-in-rstanarm" class="nav-link" data-scroll-target="#modelling-multiple-slopes-in-rstanarm">Modelling multiple slopes in rstanarm</a></li>
+  <li><a href="#calculating-species-richness" id="toc-calculating-species-richness" class="nav-link" data-scroll-target="#calculating-species-richness">calculating species richness</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Logistic GLMs: mite responses to water</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>We’ve already looked at univariate models. When we fit the same model to multiple different groups, we don’t expect the same values for all the coefficients. Each thing we are studying will respond to the same variable in different ways.</p>
+<p>Hierarchial models represent a way to <em>model</em> this variation, in ways that range from simple to complex.</p>
+<p>Before we dive in with hierarchical structure, let’s build a bridge between these two approaches.</p>
+<p>This is useful to help us understand what a hierarchical model does.</p>
+<p>However it is also useful from a strict model-building perspective – so useful that <a href="https://statmodeling.stat.columbia.edu/2005/03/07/the_secret_weap/">Andrew Gelman calls it a “Secret Weapon”</a></p>
+<section id="loading-models-and-data" class="level2">
+<h2 class="anchored" data-anchor-id="loading-models-and-data">Loading models and data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(dplyr))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(rstanarm))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(mite, <span class="at">package =</span> <span class="st">"vegan"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"mite.env"</span>, <span class="at">package =</span> <span class="st">"vegan"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"mite.xy"</span>, <span class="at">package =</span> <span class="st">"vegan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And some quick data restructuring to combine both.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine data and environment</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>mite_data_long <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(mite.env, mite) <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(Brachy<span class="sc">:</span>Trimalc2, <span class="at">names_to =</span> <span class="st">"spp"</span>, <span class="at">values_to =</span> <span class="st">"abd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To keep things simple and univariate, let’s consider only water concentration as an independent variable.</p>
+<p>First, a quick word about centering and scaling a predictor variable:</p>
+<ol type="1">
+<li>I center the predictor by subtracting the mean. This changes the <em>intercept</em> of my linear predictor. it becomes the mean log-odds of occurrance when the water content is average</li>
+<li>I divide water content by 100. The dataset has units of <strong>grams per Litre</strong> of water (see <code>?vegan::mite.env</code> for more details). This is fine, but I don’t think mites are able to sense differences as precise as a millimeter of water either way. by dividing by 10 I transform this into centilitres, which is more informative.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mite_data_long_transformed <span class="ot">&lt;-</span> mite_data_long <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">presabs =</span> <span class="fu">as.numeric</span>(abd<span class="sc">&gt;</span><span class="dv">0</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>         <span class="co"># center predictors</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">water =</span> (WatrCont <span class="sc">-</span> <span class="fu">mean</span>(WatrCont)) <span class="sc">/</span> <span class="dv">100</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>         )</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>mite_data_long_transformed <span class="sc">|&gt;</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> water, <span class="at">y =</span> presabs)) <span class="sc">+</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>, <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> <span class="st">"binomial"</span>)) <span class="sc">+</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>spp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/smoothglm-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>some things to notice about this figure:</p>
+<ul>
+<li>the x-axis scale has been transformed from “grams per litre” to “centilitres away from average</li>
+<li>there is a ton of variation in how different species respond to water!</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mite_many_glms <span class="ot">&lt;-</span> mite_data_long_transformed <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest_by</span>(spp) <span class="sc">|&gt;</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">logistic_regressions =</span> <span class="fu">list</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">glm</span>(presabs <span class="sc">~</span> water,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">family =</span> <span class="st">"binomial"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> data))) <span class="sc">|&gt;</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">coefs =</span> <span class="fu">list</span>(broom<span class="sc">::</span><span class="fu">tidy</span>(logistic_regressions)))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>mite_many_glms <span class="ot">&lt;-</span> mite_data_long_transformed <span class="sc">|&gt;</span> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest_by</span>(spp) <span class="sc">|&gt;</span> </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">logistic_regressions =</span> <span class="fu">list</span>(</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">glm</span>(presabs <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> water, </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>),</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> data)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span> </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">coefs =</span> <span class="fu">list</span>(broom<span class="sc">::</span><span class="fu">tidy</span>(logistic_regressions)))</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(mite_many_glms<span class="sc">$</span>logistic_regressions[[<span class="dv">5</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term        estimate std.error statistic   p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)   -0.644     0.353     -1.82 0.0684   
+2 water         -1.82      0.446     -4.08 0.0000450</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">glance</span>(mite_many_glms<span class="sc">$</span>logistic_regressions[[<span class="dv">5</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 8
+  null.deviance df.null logLik   AIC   BIC deviance df.residual  nobs
+          &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+1          95.6      69  -28.3  60.6  65.1     56.6          68    70</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mite_many_glms<span class="sc">$</span>coefs[[<span class="dv">5</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term        estimate std.error statistic   p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)   -0.644     0.353     -1.82 0.0684   
+2 water         -1.82      0.446     -4.08 0.0000450</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Split-Apply-Combine
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To explore this kind of thinking, we are going to use an approach sometimes called <a href="https://vita.had.co.nz/papers/plyr.pdf">“split-apply-combine”</a></p>
+<p>There are many possible ways to do this in practice. We are using a technique here from the tidyverse, which you can <a href="https://dplyr.tidyverse.org/articles/rowwise.html">read more about</a>.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mite_many_glm_coefs <span class="ot">&lt;-</span> mite_many_glms <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>data, <span class="sc">-</span>logistic_regressions) <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(coefs)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>mite_many_glm_coefs <span class="sc">|&gt;</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> estimate, <span class="at">y =</span> spp,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">xmin =</span> estimate <span class="sc">-</span> std.error,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">xmax =</span> estimate <span class="sc">+</span> std.error)) <span class="sc">+</span> </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>() <span class="sc">+</span> </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>term, <span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/coef_plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As you can see, some of these estimates are high, others low. We could also plot these as histograms to see this distribution.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mite_many_glm_coefs <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> estimate)) <span class="sc">+</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> .<span class="dv">5</span>) <span class="sc">+</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>term, <span class="at">scales =</span> <span class="st">"free"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/secretweapon_hist-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Once again, the two parameters of this model represent:</p>
+<ul>
+<li><em>Intercept</em> The probability (in log-odds) of a species being present at the average water concentration. some species are common, others are rare.</li>
+<li><em>water</em> this is the change in probability (in log-odds) as water increases by one centilitre per litre of substrate.</li>
+</ul>
+</section>
+<section id="modelling-multiple-slopes-in-rstanarm" class="level2">
+<h2 class="anchored" data-anchor-id="modelling-multiple-slopes-in-rstanarm">Modelling multiple slopes in rstanarm</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mite_data_long_transformed <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 2,450
+Columns: 9
+$ SubsDens  &lt;dbl&gt; 39.18, 39.18, 39.18, 39.18, 39.18, 39.18, 39.18, 39.18, 39.1…
+$ WatrCont  &lt;dbl&gt; 350.15, 350.15, 350.15, 350.15, 350.15, 350.15, 350.15, 350.…
+$ Substrate &lt;fct&gt; Sphagn1, Sphagn1, Sphagn1, Sphagn1, Sphagn1, Sphagn1, Sphagn…
+$ Shrub     &lt;ord&gt; Few, Few, Few, Few, Few, Few, Few, Few, Few, Few, Few, Few, …
+$ Topo      &lt;fct&gt; Hummock, Hummock, Hummock, Hummock, Hummock, Hummock, Hummoc…
+$ spp       &lt;chr&gt; "Brachy", "PHTH", "HPAV", "RARD", "SSTR", "Protopl", "MEGR",…
+$ abd       &lt;int&gt; 17, 5, 5, 3, 2, 1, 4, 2, 2, 1, 4, 1, 17, 4, 9, 50, 3, 1, 1, …
+$ presabs   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ water     &lt;dbl&gt; -0.6048571, -0.6048571, -0.6048571, -0.6048571, -0.6048571, …</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>mite_slopes_corr_stan <span class="ot">&lt;-</span> <span class="fu">stan_glmer</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  presabs <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> water <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> water <span class="sc">|</span> spp), </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> mite_data_long_transformed,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># priors </span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> <span class="fu">normal</span>(<span class="dv">0</span>, .<span class="dv">2</span>),</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_intercept =</span> <span class="fu">normal</span>(<span class="sc">-</span>.<span class="dv">2</span>, .<span class="dv">5</span>),</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_covariance =</span> <span class="fu">decov</span>(</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">regularization =</span> <span class="dv">2</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">concentration =</span> <span class="dv">1</span>, </span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> .<span class="dv">4</span>, </span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">scale =</span> <span class="dv">1</span>),</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter =</span> <span class="dv">2000</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">refresh =</span> <span class="dv">0</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mite_slopes_corr_stan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Model Info:
+ function:     stan_glmer
+ family:       binomial [logit]
+ formula:      presabs ~ 1 + water + (1 + water | spp)
+ algorithm:    sampling
+ sample:       4000 (posterior sample size)
+ priors:       see help('prior_summary')
+ observations: 2450
+ groups:       spp (35)
+
+Estimates:
+                                     mean   sd   10%   50%   90%
+(Intercept)                        -0.3    0.2 -0.6  -0.3   0.0 
+water                              -0.4    0.1 -0.5  -0.4  -0.2 
+b[(Intercept) spp:Brachy]           2.6    0.5  2.0   2.6   3.2 
+b[water spp:Brachy]                -0.1    0.3 -0.5  -0.1   0.2 
+b[(Intercept) spp:Ceratoz1]         0.8    0.3  0.3   0.8   1.2 
+b[water spp:Ceratoz1]               0.4    0.2  0.1   0.4   0.6 
+b[(Intercept) spp:Ceratoz3]         0.1    0.3 -0.4   0.1   0.5 
+b[water spp:Ceratoz3]               0.6    0.2  0.3   0.6   0.9 
+b[(Intercept) spp:Eupelops]        -0.2    0.4 -0.6  -0.2   0.3 
+b[water spp:Eupelops]              -0.2    0.2 -0.5  -0.2   0.1 
+b[(Intercept) spp:FSET]            -0.3    0.4 -0.8  -0.3   0.2 
+b[water spp:FSET]                  -1.2    0.4 -1.7  -1.2  -0.8 
+b[(Intercept) spp:Galumna1]        -0.7    0.4 -1.3  -0.7  -0.2 
+b[water spp:Galumna1]              -1.1    0.4 -1.6  -1.1  -0.7 
+b[(Intercept) spp:HMIN]             0.1    0.4 -0.3   0.1   0.6 
+b[water spp:HMIN]                  -0.9    0.3 -1.3  -0.9  -0.5 
+b[(Intercept) spp:HMIN2]           -0.6    0.4 -1.1  -0.6  -0.1 
+b[water spp:HMIN2]                 -0.8    0.3 -1.3  -0.8  -0.5 
+b[(Intercept) spp:HPAV]             3.2    0.6  2.5   3.2   4.0 
+b[water spp:HPAV]                  -0.2    0.3 -0.6  -0.2   0.2 
+b[(Intercept) spp:HRUF]            -1.5    0.4 -2.1  -1.5  -1.0 
+b[water spp:HRUF]                   0.1    0.3 -0.2   0.1   0.4 
+b[(Intercept) spp:LCIL]             2.1    0.5  1.5   2.1   2.7 
+b[water spp:LCIL]                   1.5    0.3  1.1   1.5   1.9 
+b[(Intercept) spp:Lepidzts]        -2.1    0.5 -2.8  -2.1  -1.5 
+b[water spp:Lepidzts]              -0.4    0.3 -0.9  -0.4   0.0 
+b[(Intercept) spp:LRUG]             1.3    0.4  0.8   1.3   1.8 
+b[water spp:LRUG]                   1.1    0.3  0.8   1.1   1.5 
+b[(Intercept) spp:MEGR]             0.5    0.4  0.0   0.5   1.0 
+b[water spp:MEGR]                  -0.6    0.3 -1.0  -0.6  -0.2 
+b[(Intercept) spp:Miniglmn]        -2.1    0.5 -2.8  -2.1  -1.5 
+b[water spp:Miniglmn]              -0.6    0.3 -1.1  -0.6  -0.2 
+b[(Intercept) spp:MPRO]            -1.8    0.5 -2.4  -1.8  -1.3 
+b[water spp:MPRO]                   0.0    0.3 -0.4   0.0   0.3 
+b[(Intercept) spp:NCOR]             0.3    0.3 -0.1   0.3   0.7 
+b[water spp:NCOR]                   0.5    0.2  0.2   0.5   0.8 
+b[(Intercept) spp:NPRA]             1.0    0.4  0.6   1.0   1.5 
+b[water spp:NPRA]                  -0.3    0.2 -0.6  -0.3   0.0 
+b[(Intercept) spp:ONOV]             3.3    0.7  2.5   3.3   4.2 
+b[water spp:ONOV]                  -0.9    0.4 -1.4  -0.9  -0.4 
+b[(Intercept) spp:Oppiminu]         0.0    0.3 -0.4   0.0   0.4 
+b[water spp:Oppiminu]               0.5    0.2  0.2   0.5   0.7 
+b[(Intercept) spp:Oribatl1]        -0.1    0.4 -0.6  -0.1   0.3 
+b[water spp:Oribatl1]              -0.6    0.3 -1.0  -0.6  -0.3 
+b[(Intercept) spp:PHTH]            -0.7    0.4 -1.3  -0.7  -0.2 
+b[water spp:PHTH]                  -0.9    0.3 -1.3  -0.9  -0.5 
+b[(Intercept) spp:PLAG2]           -0.6    0.4 -1.1  -0.6  -0.2 
+b[water spp:PLAG2]                  0.3    0.2  0.0   0.3   0.6 
+b[(Intercept) spp:PPEL]            -2.0    0.5 -2.6  -1.9  -1.3 
+b[water spp:PPEL]                  -0.2    0.3 -0.6  -0.2   0.2 
+b[(Intercept) spp:Protopl]         -1.7    0.5 -2.3  -1.7  -1.1 
+b[water spp:Protopl]               -0.4    0.3 -0.8  -0.4  -0.1 
+b[(Intercept) spp:PWIL]             0.2    0.4 -0.2   0.2   0.7 
+b[water spp:PWIL]                  -0.2    0.2 -0.6  -0.2   0.1 
+b[(Intercept) spp:RARD]            -1.1    0.4 -1.6  -1.0  -0.5 
+b[water spp:RARD]                  -1.0    0.3 -1.4  -1.0  -0.6 
+b[(Intercept) spp:SLAT]            -1.9    0.5 -2.5  -1.8  -1.3 
+b[water spp:SLAT]                  -0.5    0.3 -0.9  -0.4  -0.1 
+b[(Intercept) spp:SSTR]            -1.8    0.5 -2.3  -1.7  -1.2 
+b[water spp:SSTR]                  -0.1    0.3 -0.5  -0.1   0.2 
+b[(Intercept) spp:Stgncrs2]        -1.3    0.4 -1.9  -1.3  -0.8 
+b[water spp:Stgncrs2]              -0.7    0.3 -1.1  -0.7  -0.3 
+b[(Intercept) spp:SUCT]             3.9    0.7  3.0   3.8   4.8 
+b[water spp:SUCT]                  -0.6    0.4 -1.1  -0.6  -0.2 
+b[(Intercept) spp:Trhypch1]         0.1    0.3 -0.3   0.1   0.6 
+b[water spp:Trhypch1]               0.8    0.2  0.5   0.8   1.1 
+b[(Intercept) spp:Trimalc2]        -1.1    0.4 -1.7  -1.1  -0.6 
+b[water spp:Trimalc2]               1.3    0.3  0.9   1.3   1.6 
+b[(Intercept) spp:TVEL]             0.6    0.4  0.1   0.6   1.1 
+b[water spp:TVEL]                  -1.0    0.3 -1.4  -1.0  -0.6 
+b[(Intercept) spp:TVIE]            -0.5    0.4 -0.9  -0.5   0.0 
+b[water spp:TVIE]                   0.8    0.2  0.5   0.8   1.1 
+Sigma[spp:(Intercept),(Intercept)]  2.7    0.7  1.9   2.6   3.7 
+Sigma[spp:water,(Intercept)]        0.1    0.2 -0.2   0.1   0.4 
+Sigma[spp:water,water]              0.7    0.2  0.4   0.6   1.0 
+
+Fit Diagnostics:
+           mean   sd   10%   50%   90%
+mean_PPD 0.4    0.0  0.4   0.4   0.4  
+
+The mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help('summary.stanreg')).
+
+MCMC diagnostics
+                                   mcse Rhat n_eff
+(Intercept)                        0.0  1.0   351 
+water                              0.0  1.0   896 
+b[(Intercept) spp:Brachy]          0.0  1.0  1249 
+b[water spp:Brachy]                0.0  1.0  2722 
+b[(Intercept) spp:Ceratoz1]        0.0  1.0   660 
+b[water spp:Ceratoz1]              0.0  1.0  1930 
+b[(Intercept) spp:Ceratoz3]        0.0  1.0   636 
+b[water spp:Ceratoz3]              0.0  1.0  1684 
+b[(Intercept) spp:Eupelops]        0.0  1.0   692 
+b[water spp:Eupelops]              0.0  1.0  2223 
+b[(Intercept) spp:FSET]            0.0  1.0   865 
+b[water spp:FSET]                  0.0  1.0  2505 
+b[(Intercept) spp:Galumna1]        0.0  1.0   870 
+b[water spp:Galumna1]              0.0  1.0  2649 
+b[(Intercept) spp:HMIN]            0.0  1.0   770 
+b[water spp:HMIN]                  0.0  1.0  2876 
+b[(Intercept) spp:HMIN2]           0.0  1.0   837 
+b[water spp:HMIN2]                 0.0  1.0  2520 
+b[(Intercept) spp:HPAV]            0.0  1.0  1342 
+b[water spp:HPAV]                  0.0  1.0  3136 
+b[(Intercept) spp:HRUF]            0.0  1.0   947 
+b[water spp:HRUF]                  0.0  1.0  2555 
+b[(Intercept) spp:LCIL]            0.0  1.0  1096 
+b[water spp:LCIL]                  0.0  1.0  3323 
+b[(Intercept) spp:Lepidzts]        0.0  1.0  1436 
+b[water spp:Lepidzts]              0.0  1.0  3385 
+b[(Intercept) spp:LRUG]            0.0  1.0   803 
+b[water spp:LRUG]                  0.0  1.0  3048 
+b[(Intercept) spp:MEGR]            0.0  1.0   738 
+b[water spp:MEGR]                  0.0  1.0  2430 
+b[(Intercept) spp:Miniglmn]        0.0  1.0  1644 
+b[water spp:Miniglmn]              0.0  1.0  2828 
+b[(Intercept) spp:MPRO]            0.0  1.0  1063 
+b[water spp:MPRO]                  0.0  1.0  2994 
+b[(Intercept) spp:NCOR]            0.0  1.0   566 
+b[water spp:NCOR]                  0.0  1.0  2130 
+b[(Intercept) spp:NPRA]            0.0  1.0   630 
+b[water spp:NPRA]                  0.0  1.0  2353 
+b[(Intercept) spp:ONOV]            0.0  1.0  1359 
+b[water spp:ONOV]                  0.0  1.0  2669 
+b[(Intercept) spp:Oppiminu]        0.0  1.0   622 
+b[water spp:Oppiminu]              0.0  1.0  2021 
+b[(Intercept) spp:Oribatl1]        0.0  1.0   763 
+b[water spp:Oribatl1]              0.0  1.0  2541 
+b[(Intercept) spp:PHTH]            0.0  1.0   906 
+b[water spp:PHTH]                  0.0  1.0  2908 
+b[(Intercept) spp:PLAG2]           0.0  1.0   728 
+b[water spp:PLAG2]                 0.0  1.0  2322 
+b[(Intercept) spp:PPEL]            0.0  1.0  1044 
+b[water spp:PPEL]                  0.0  1.0  3192 
+b[(Intercept) spp:Protopl]         0.0  1.0  1213 
+b[water spp:Protopl]               0.0  1.0  2947 
+b[(Intercept) spp:PWIL]            0.0  1.0   693 
+b[water spp:PWIL]                  0.0  1.0  2213 
+b[(Intercept) spp:RARD]            0.0  1.0   901 
+b[water spp:RARD]                  0.0  1.0  2857 
+b[(Intercept) spp:SLAT]            0.0  1.0  1302 
+b[water spp:SLAT]                  0.0  1.0  2761 
+b[(Intercept) spp:SSTR]            0.0  1.0  1125 
+b[water spp:SSTR]                  0.0  1.0  2871 
+b[(Intercept) spp:Stgncrs2]        0.0  1.0   914 
+b[water spp:Stgncrs2]              0.0  1.0  2505 
+b[(Intercept) spp:SUCT]            0.0  1.0  1952 
+b[water spp:SUCT]                  0.0  1.0  2458 
+b[(Intercept) spp:Trhypch1]        0.0  1.0   666 
+b[water spp:Trhypch1]              0.0  1.0  2251 
+b[(Intercept) spp:Trimalc2]        0.0  1.0   913 
+b[water spp:Trimalc2]              0.0  1.0  3347 
+b[(Intercept) spp:TVEL]            0.0  1.0   728 
+b[water spp:TVEL]                  0.0  1.0  3029 
+b[(Intercept) spp:TVIE]            0.0  1.0   700 
+b[water spp:TVIE]                  0.0  1.0  2297 
+Sigma[spp:(Intercept),(Intercept)] 0.0  1.0   743 
+Sigma[spp:water,(Intercept)]       0.0  1.0   942 
+Sigma[spp:water,water]             0.0  1.0  1122 
+mean_PPD                           0.0  1.0  3994 
+log-posterior                      0.3  1.0   774 
+
+For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dgamma</span>(x, <span class="at">shape =</span> .<span class="dv">4</span>, <span class="at">scale =</span> <span class="dv">7</span>), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rgamma</span>(<span class="dv">5000</span>, <span class="at">shape =</span> .<span class="dv">4</span>, <span class="at">scale =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3901756</code></pre>
+</div>
+</div>
+<p>plot it on the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>predicted_mite_curves <span class="ot">&lt;-</span> mite_data_long_transformed <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  modelr<span class="sc">::</span><span class="fu">data_grid</span>(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">water =</span> modelr<span class="sc">::</span><span class="fu">seq_range</span>(water, <span class="at">n =</span> <span class="dv">20</span>) ,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">spp =</span> spp <span class="co">#head(spp)</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_rvars</span>(mite_slopes_corr_stan)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>predicted_mite_curves <span class="sc">|&gt;</span> </span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> water, <span class="at">ydist =</span> .epred)) <span class="sc">+</span> </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  tidybayes<span class="sc">::</span><span class="fu">stat_lineribbon</span>() <span class="sc">+</span> </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>spp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="calculating-species-richness" class="level2">
+<h2 class="anchored" data-anchor-id="calculating-species-richness">calculating species richness</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>predicted_mite_curves <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> spp, <span class="at">values_from =</span> .epred) <span class="sc">|&gt;</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest_by</span>(water) <span class="sc">|&gt;</span> </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">S =</span> <span class="fu">Reduce</span>(<span class="st">`</span><span class="at">+</span><span class="st">`</span>, data)) <span class="sc">|&gt;</span> </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> water, <span class="at">ydist =</span> S)) <span class="sc">+</span> </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Prior predictions</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>mite_data_long_transformed <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 2,450
+Columns: 9
+$ SubsDens  &lt;dbl&gt; 39.18, 39.18, 39.18, 39.18, 39.18, 39.18, 39.18, 39.18, 39.1…
+$ WatrCont  &lt;dbl&gt; 350.15, 350.15, 350.15, 350.15, 350.15, 350.15, 350.15, 350.…
+$ Substrate &lt;fct&gt; Sphagn1, Sphagn1, Sphagn1, Sphagn1, Sphagn1, Sphagn1, Sphagn…
+$ Shrub     &lt;ord&gt; Few, Few, Few, Few, Few, Few, Few, Few, Few, Few, Few, Few, …
+$ Topo      &lt;fct&gt; Hummock, Hummock, Hummock, Hummock, Hummock, Hummock, Hummoc…
+$ spp       &lt;chr&gt; "Brachy", "PHTH", "HPAV", "RARD", "SSTR", "Protopl", "MEGR",…
+$ abd       &lt;int&gt; 17, 5, 5, 3, 2, 1, 4, 2, 2, 1, 4, 1, 17, 4, 9, 50, 3, 1, 1, …
+$ presabs   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ water     &lt;dbl&gt; -0.6048571, -0.6048571, -0.6048571, -0.6048571, -0.6048571, …</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mite_PD_stan <span class="ot">&lt;-</span> <span class="fu">stan_glmer</span>(</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  presabs <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> water <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> water <span class="sc">|</span> spp), </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> mite_data_long_transformed,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># priors </span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> <span class="fu">normal</span>(<span class="dv">1</span>, .<span class="dv">2</span>),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_intercept =</span> <span class="fu">normal</span>(.<span class="dv">2</span>, .<span class="dv">5</span>),</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_covariance =</span> <span class="fu">decov</span>(</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">regularization =</span> <span class="dv">2</span>,</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">concentration =</span> <span class="dv">1</span>, </span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="dv">2</span>, </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">scale =</span> <span class="dv">1</span>),</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_PD=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>,</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">iter =</span> <span class="dv">2000</span>,</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">refresh =</span> <span class="dv">500</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 1).
+Chain 1: 
+Chain 1: Gradient evaluation took 4.2e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.42 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Chain 1: 
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 1: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 1: 
+Chain 1:  Elapsed Time: 0.283 seconds (Warm-up)
+Chain 1:                0.259 seconds (Sampling)
+Chain 1:                0.542 seconds (Total)
+Chain 1: 
+
+SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 2).
+Chain 2: 
+Chain 2: Gradient evaluation took 3.5e-05 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.35 seconds.
+Chain 2: Adjust your expectations accordingly!
+Chain 2: 
+Chain 2: 
+Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 2: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 2: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 2: 
+Chain 2:  Elapsed Time: 0.264 seconds (Warm-up)
+Chain 2:                0.259 seconds (Sampling)
+Chain 2:                0.523 seconds (Total)
+Chain 2: 
+
+SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 3).
+Chain 3: 
+Chain 3: Gradient evaluation took 2.4e-05 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.
+Chain 3: Adjust your expectations accordingly!
+Chain 3: 
+Chain 3: 
+Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 3: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 3: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 3: 
+Chain 3:  Elapsed Time: 0.267 seconds (Warm-up)
+Chain 3:                0.26 seconds (Sampling)
+Chain 3:                0.527 seconds (Total)
+Chain 3: 
+
+SAMPLING FOR MODEL 'bernoulli' NOW (CHAIN 4).
+Chain 4: 
+Chain 4: Gradient evaluation took 2.5e-05 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
+Chain 4: Adjust your expectations accordingly!
+Chain 4: 
+Chain 4: 
+Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 4: Iteration:  500 / 2000 [ 25%]  (Warmup)
+Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 4: Iteration: 1500 / 2000 [ 75%]  (Sampling)
+Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 4: 
+Chain 4:  Elapsed Time: 0.274 seconds (Warm-up)
+Chain 4:                0.26 seconds (Sampling)
+Chain 4:                0.534 seconds (Total)
+Chain 4: </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mite_PD_stan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Model Info:
+ function:     stan_glmer
+ family:       binomial [logit]
+ formula:      presabs ~ 1 + water + (1 + water | spp)
+ algorithm:    sampling
+ sample:       4000 (posterior sample size)
+ priors:       see help('prior_summary')
+ observations: 2450
+ groups:       spp (35)
+
+Estimates:
+                                     mean   sd   10%   50%   90%
+(Intercept)                         0.2    0.5 -0.5   0.2   0.9 
+water                               1.0    0.2  0.7   1.0   1.3 
+b[(Intercept) spp:Brachy]           0.0    2.4 -2.4   0.0   2.3 
+b[water spp:Brachy]                 0.0    2.4 -2.3   0.0   2.4 
+b[(Intercept) spp:Ceratoz1]         0.0    2.4 -2.4   0.0   2.3 
+b[water spp:Ceratoz1]               0.0    2.3 -2.3   0.0   2.3 
+b[(Intercept) spp:Ceratoz3]         0.0    2.4 -2.2   0.0   2.4 
+b[water spp:Ceratoz3]               0.0    2.5 -2.4   0.0   2.5 
+b[(Intercept) spp:Eupelops]         0.0    2.5 -2.3   0.0   2.3 
+b[water spp:Eupelops]              -0.1    2.4 -2.3   0.0   2.3 
+b[(Intercept) spp:FSET]             0.0    2.4 -2.4   0.0   2.4 
+b[water spp:FSET]                  -0.1    2.5 -2.5   0.0   2.2 
+b[(Intercept) spp:Galumna1]         0.0    2.4 -2.2   0.0   2.2 
+b[water spp:Galumna1]              -0.1    2.4 -2.4   0.0   2.2 
+b[(Intercept) spp:HMIN]             0.1    2.4 -2.3   0.0   2.4 
+b[water spp:HMIN]                   0.0    2.3 -2.3   0.0   2.2 
+b[(Intercept) spp:HMIN2]            0.0    2.3 -2.2   0.0   2.1 
+b[water spp:HMIN2]                  0.0    2.4 -2.3   0.0   2.4 
+b[(Intercept) spp:HPAV]             0.1    2.4 -2.2   0.0   2.4 
+b[water spp:HPAV]                   0.0    2.4 -2.3   0.0   2.4 
+b[(Intercept) spp:HRUF]             0.1    2.4 -2.4   0.0   2.5 
+b[water spp:HRUF]                  -0.1    2.5 -2.4   0.0   2.3 
+b[(Intercept) spp:LCIL]             0.0    2.4 -2.3   0.0   2.3 
+b[water spp:LCIL]                   0.0    2.5 -2.4   0.0   2.4 
+b[(Intercept) spp:Lepidzts]         0.0    2.5 -2.4   0.0   2.5 
+b[water spp:Lepidzts]               0.0    2.5 -2.5   0.0   2.4 
+b[(Intercept) spp:LRUG]             0.0    2.3 -2.3   0.0   2.3 
+b[water spp:LRUG]                   0.0    2.4 -2.3   0.0   2.3 
+b[(Intercept) spp:MEGR]             0.0    2.4 -2.3   0.0   2.4 
+b[water spp:MEGR]                   0.0    2.4 -2.3   0.0   2.4 
+b[(Intercept) spp:Miniglmn]         0.0    2.3 -2.3   0.0   2.3 
+b[water spp:Miniglmn]               0.0    2.5 -2.3   0.0   2.4 
+b[(Intercept) spp:MPRO]             0.0    2.4 -2.4   0.0   2.3 
+b[water spp:MPRO]                  -0.1    2.4 -2.3   0.0   2.2 
+b[(Intercept) spp:NCOR]             0.0    2.3 -2.1   0.0   2.2 
+b[water spp:NCOR]                   0.0    2.5 -2.4   0.0   2.4 
+b[(Intercept) spp:NPRA]             0.0    2.4 -2.3   0.0   2.3 
+b[water spp:NPRA]                   0.1    2.6 -2.2   0.0   2.6 
+b[(Intercept) spp:ONOV]             0.0    2.3 -2.3   0.0   2.3 
+b[water spp:ONOV]                   0.0    2.3 -2.3   0.0   2.3 
+b[(Intercept) spp:Oppiminu]         0.0    2.4 -2.3   0.0   2.4 
+b[water spp:Oppiminu]              -0.1    2.4 -2.6   0.0   2.3 
+b[(Intercept) spp:Oribatl1]         0.0    2.4 -2.3   0.0   2.3 
+b[water spp:Oribatl1]               0.0    2.5 -2.4   0.0   2.3 
+b[(Intercept) spp:PHTH]             0.0    2.4 -2.3   0.0   2.3 
+b[water spp:PHTH]                  -0.1    2.2 -2.4   0.0   2.1 
+b[(Intercept) spp:PLAG2]            0.0    2.4 -2.3   0.0   2.3 
+b[water spp:PLAG2]                  0.0    2.5 -2.4   0.0   2.4 
+b[(Intercept) spp:PPEL]             0.0    2.3 -2.3   0.0   2.2 
+b[water spp:PPEL]                   0.0    2.5 -2.3   0.0   2.4 
+b[(Intercept) spp:Protopl]          0.0    2.4 -2.4   0.0   2.3 
+b[water spp:Protopl]                0.0    2.6 -2.3   0.0   2.4 
+b[(Intercept) spp:PWIL]             0.0    2.4 -2.3   0.0   2.2 
+b[water spp:PWIL]                   0.0    2.4 -2.3   0.0   2.4 
+b[(Intercept) spp:RARD]             0.0    2.3 -2.1   0.0   2.3 
+b[water spp:RARD]                   0.0    2.4 -2.3   0.0   2.3 
+b[(Intercept) spp:SLAT]             0.0    2.4 -2.3   0.0   2.4 
+b[water spp:SLAT]                   0.0    2.6 -2.4   0.0   2.4 
+b[(Intercept) spp:SSTR]             0.1    2.4 -2.2   0.0   2.5 
+b[water spp:SSTR]                   0.0    2.5 -2.4   0.0   2.3 
+b[(Intercept) spp:Stgncrs2]         0.0    2.3 -2.3   0.0   2.2 
+b[water spp:Stgncrs2]               0.0    2.6 -2.4   0.0   2.6 
+b[(Intercept) spp:SUCT]             0.0    2.5 -2.5   0.0   2.5 
+b[water spp:SUCT]                   0.0    2.5 -2.3   0.0   2.4 
+b[(Intercept) spp:Trhypch1]         0.0    2.3 -2.5   0.0   2.4 
+b[water spp:Trhypch1]              -0.1    2.5 -2.4   0.0   2.2 
+b[(Intercept) spp:Trimalc2]         0.1    2.4 -2.1   0.0   2.5 
+b[water spp:Trimalc2]               0.0    2.3 -2.3   0.0   2.3 
+b[(Intercept) spp:TVEL]             0.0    2.3 -2.3   0.0   2.2 
+b[water spp:TVEL]                   0.0    2.4 -2.2   0.0   2.2 
+b[(Intercept) spp:TVIE]             0.0    2.4 -2.3   0.0   2.2 
+b[water spp:TVIE]                  -0.1    2.5 -2.5   0.0   2.2 
+Sigma[spp:(Intercept),(Intercept)]  5.7    9.8  0.1   2.1  15.0 
+Sigma[spp:water,(Intercept)]        0.0    4.0 -2.3   0.0   2.4 
+Sigma[spp:water,water]              6.0   11.2  0.1   2.2  15.8 
+
+MCMC diagnostics
+                                   mcse Rhat n_eff
+(Intercept)                        0.0  1.0  7989 
+water                              0.0  1.0  8211 
+b[(Intercept) spp:Brachy]          0.0  1.0  3494 
+b[water spp:Brachy]                0.0  1.0  3056 
+b[(Intercept) spp:Ceratoz1]        0.0  1.0  3815 
+b[water spp:Ceratoz1]              0.0  1.0  3537 
+b[(Intercept) spp:Ceratoz3]        0.0  1.0  4250 
+b[water spp:Ceratoz3]              0.0  1.0  3752 
+b[(Intercept) spp:Eupelops]        0.0  1.0  3174 
+b[water spp:Eupelops]              0.0  1.0  3018 
+b[(Intercept) spp:FSET]            0.0  1.0  4063 
+b[water spp:FSET]                  0.0  1.0  3234 
+b[(Intercept) spp:Galumna1]        0.0  1.0  4081 
+b[water spp:Galumna1]              0.0  1.0  3723 
+b[(Intercept) spp:HMIN]            0.0  1.0  3714 
+b[water spp:HMIN]                  0.0  1.0  3540 
+b[(Intercept) spp:HMIN2]           0.0  1.0  4005 
+b[water spp:HMIN2]                 0.0  1.0  3557 
+b[(Intercept) spp:HPAV]            0.0  1.0  4163 
+b[water spp:HPAV]                  0.0  1.0  3205 
+b[(Intercept) spp:HRUF]            0.0  1.0  4111 
+b[water spp:HRUF]                  0.0  1.0  3046 
+b[(Intercept) spp:LCIL]            0.0  1.0  3631 
+b[water spp:LCIL]                  0.0  1.0  3332 
+b[(Intercept) spp:Lepidzts]        0.0  1.0  3663 
+b[water spp:Lepidzts]              0.0  1.0  3387 
+b[(Intercept) spp:LRUG]            0.0  1.0  4273 
+b[water spp:LRUG]                  0.0  1.0  3546 
+b[(Intercept) spp:MEGR]            0.0  1.0  3911 
+b[water spp:MEGR]                  0.0  1.0  2577 
+b[(Intercept) spp:Miniglmn]        0.0  1.0  3597 
+b[water spp:Miniglmn]              0.0  1.0  3494 
+b[(Intercept) spp:MPRO]            0.0  1.0  4323 
+b[water spp:MPRO]                  0.0  1.0  3230 
+b[(Intercept) spp:NCOR]            0.0  1.0  3849 
+b[water spp:NCOR]                  0.0  1.0  3593 
+b[(Intercept) spp:NPRA]            0.0  1.0  3890 
+b[water spp:NPRA]                  0.0  1.0  3028 
+b[(Intercept) spp:ONOV]            0.0  1.0  3922 
+b[water spp:ONOV]                  0.0  1.0  3267 
+b[(Intercept) spp:Oppiminu]        0.0  1.0  3669 
+b[water spp:Oppiminu]              0.0  1.0  3518 
+b[(Intercept) spp:Oribatl1]        0.0  1.0  3952 
+b[water spp:Oribatl1]              0.0  1.0  3388 
+b[(Intercept) spp:PHTH]            0.0  1.0  3958 
+b[water spp:PHTH]                  0.0  1.0  3542 
+b[(Intercept) spp:PLAG2]           0.0  1.0  4342 
+b[water spp:PLAG2]                 0.0  1.0  3305 
+b[(Intercept) spp:PPEL]            0.0  1.0  3581 
+b[water spp:PPEL]                  0.0  1.0  3596 
+b[(Intercept) spp:Protopl]         0.0  1.0  3916 
+b[water spp:Protopl]               0.0  1.0  3186 
+b[(Intercept) spp:PWIL]            0.0  1.0  3995 
+b[water spp:PWIL]                  0.0  1.0  3636 
+b[(Intercept) spp:RARD]            0.0  1.0  3762 
+b[water spp:RARD]                  0.0  1.0  3726 
+b[(Intercept) spp:SLAT]            0.0  1.0  3834 
+b[water spp:SLAT]                  0.0  1.0  3683 
+b[(Intercept) spp:SSTR]            0.0  1.0  3990 
+b[water spp:SSTR]                  0.0  1.0  3288 
+b[(Intercept) spp:Stgncrs2]        0.0  1.0  3861 
+b[water spp:Stgncrs2]              0.0  1.0  3315 
+b[(Intercept) spp:SUCT]            0.0  1.0  3931 
+b[water spp:SUCT]                  0.0  1.0  3288 
+b[(Intercept) spp:Trhypch1]        0.0  1.0  4083 
+b[water spp:Trhypch1]              0.0  1.0  3495 
+b[(Intercept) spp:Trimalc2]        0.0  1.0  3430 
+b[water spp:Trimalc2]              0.0  1.0  3412 
+b[(Intercept) spp:TVEL]            0.0  1.0  3968 
+b[water spp:TVEL]                  0.0  1.0  3649 
+b[(Intercept) spp:TVIE]            0.0  1.0  3455 
+b[water spp:TVIE]                  0.0  1.0  3303 
+Sigma[spp:(Intercept),(Intercept)] 0.1  1.0  4349 
+Sigma[spp:water,(Intercept)]       0.1  1.0  3101 
+Sigma[spp:water,water]             0.2  1.0  4062 
+log-posterior                      0.2  1.0  1476 
+
+For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mite_data_long_transformed <span class="sc">|&gt;</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  modelr<span class="sc">::</span><span class="fu">data_grid</span>(</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">water =</span> modelr<span class="sc">::</span><span class="fu">seq_range</span>(water, <span class="at">n =</span> <span class="dv">7</span>) ,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">spp =</span> <span class="fu">head</span>(spp)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(mite_PD_stan, <span class="at">ndraws =</span> <span class="dv">12</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> water, <span class="at">y =</span> .epred, <span class="at">group =</span> spp)) <span class="sc">+</span> </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>.draw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'Matrix'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:tidyr':
+
+    expand, pack, unpack</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>mite_water_lmer <span class="ot">&lt;-</span> <span class="fu">glmer</span>(presabs <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> water <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">+</span> water <span class="sc">|</span> spp), </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>),</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> mite_data_long_transformed,)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mite_water_lmer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: binomial  ( logit )
+Formula: presabs ~ 1 + water + (1 + water | spp)
+   Data: mite_data_long_transformed
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+   2462.5    2491.6   -1226.3    2452.5      2445 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.6137 -0.5919 -0.2328  0.5754  5.3452 
+
+Random effects:
+ Groups Name        Variance Std.Dev. Corr
+ spp    (Intercept) 2.6202   1.6187       
+        water       0.5549   0.7449   0.10
+Number of obs: 2450, groups:  spp, 35
+
+Fixed effects:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  -0.3595     0.2810  -1.280    0.201    
+water        -0.5437     0.1349  -4.032 5.54e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+      (Intr)
+water 0.099 </code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,228 @@
+---
+title: "Hierarchical models"
+author: "Andrew MacDonald"
+date: "2026-Feb-04"
+execute:
+  echo: true
+format: 
+  revealjs:
+    theme: [default]
+    incremental: true
+editor_options: 
+  chunk_output_type: console
+---
+
+## Ecological data comes in groups
+
+Why do we need them? Biological data is very often in **groups**:
+
+-   Species
+-   Sites
+-   Humans: Lab groups, field workers
+-   Transects or subplots
+-   Individuals -- measured at different times. or different parts (e.g. multiple leaves from same tree)
+
+.. but so what? How do we respect this structure in our statistical models?
+
+## Models that respect reality
+
+::::: columns
+::: {.column width="50%"}
+```{r echo=FALSE}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/archive/8/8e/20070222013916%21Long-tailed-duck.jpg")
+```
+:::
+
+::: {.column width="50%"}
+```{r echo=FALSE}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/f/f5/Rubber_duck_in_glass_bowl_crop.jpg")
+```
+:::
+:::::
+
+Models should approximate our domain knowledge *at least a little*.
+
+Hierarchical models are **cartoons of similarity**.
+
+Not the mechanism, but kind of close.
+
+## Hierarchical models: what is in it for me?
+
+-   generative process -- at least, as a cartoon
+-   better estimates through *regularization* : mathematical skepticism
+-   useful for prediction of new groups
+-   studying variance for its own sake
+
+## Hierarchical models: in math
+
+::::: columns
+::: {.column style="width: 50%; font-size: 60%;"}
+$$
+\begin{align}
+\text{Body mass}_i &\sim \text{Normal}(\mu_i, \sigma_{\text{obs}}) \\
+\mu_i &= \bar\beta + \beta_{\text{group}[i]} \\
+\bar\beta &\sim \text{Normal}(5, 2) \\
+\beta_{\text{group}} &\sim \text{Normal}(0, 1) \\
+\sigma_{\text{obs}} &\sim \text{Exponential}(.5)
+\end{align}
+$$
+:::
+
+::: {.column style="width: 50%; font-size: 60%;"}
+$$
+\begin{align}
+\text{Body mass}_i &\sim \text{Normal}(\mu_i, \sigma_{\text{obs}}) \\
+\mu_i &= \bar\beta + \beta_{\text{group}[i]} \\
+\bar\beta &\sim \text{Normal}(5, 2) \\
+\beta_{\text{group}} &\sim \text{Normal}(0, \sigma_{\text{group}
+}) \\
+\sigma_{\text{obs}} &\sim \text{Exponential}(.5) \\
+\sigma_{\text{group}} &\sim \text{Exponential}(.7)
+\end{align}
+$$
+:::
+:::::
+
+## Hierarchical models: in math {style="font-size:70%"}
+
+$$
+[\sigma_{\text{obs}},\bar{\beta},\beta_{\text{group}} |\text{Body mass}] \propto \\
+[\text{Body mass}|\sigma_{\text{obs}},\bar{\beta},\beta_{\text{group}}] \times [\sigma_{\text{obs}}] \times [\bar{\beta}] \times [\beta_{\text{group}}]
+$$ vs
+
+$$
+[\sigma_{\text{obs}},\bar{\beta},\beta_{\text{group}} |\text{Body mass}] \propto \\
+[\text{Body mass}|\sigma_{\text{obs}},\bar{\beta},\beta_{\text{group}}] \times [\sigma_{\text{obs}}] \times [\bar{\beta}] \times [\beta_{\text{group}}|\sigma_{\text{group}}] \times [\sigma_{\text{group}}]
+$$
+
+## Hierarchical models: in math {style="font-size:70%"}
+
+$$
+[\sigma_{\text{obs}},\bar{\beta},\beta_{\text{group}} |\text{Body mass}] \propto \\
+[\text{Body mass}|\sigma_{\text{obs}},\bar{\beta},\beta_{\text{group}}] \times [\sigma_{\text{obs}}] \times [\bar{\beta}] \times [\beta_{\text{group}}]
+$$ vs
+
+$$
+[\sigma_{\text{obs}},\bar{\beta},\beta_{\text{group}} |\text{Body mass}] \propto \\
+[\text{Body mass}|\sigma_{\text{obs}},\bar{\beta},\beta_{\text{group}}] \times [\sigma_{\text{obs}}] \times [\bar{\beta}] \times \color{red} {[\beta_{\text{group}}|\sigma_{\text{group}}]} \times [\sigma_{\text{group}}]
+$$
+
+## Hierarchial models in math ONE MORE TIME
+
+::: {style="font-size: 0.8em"}
+Mathematically, the basic structure of a hierarchical model is
+:::
+
+::: {style="font-size: 0.8em"}
+$$\mathbf{y} = \mathbf{X} \boldsymbol{\beta} + \mathbf{Z}\mathbf{b} + \boldsymbol{\varepsilon}$$
+:::
+
+::: {style="font-size: 0.8em"}
+where
+:::
+
+::: {style="font-size: 0.8em"}
+-   $\mathbf{y}$ : Vector of response variable
+-   $\mathbf{X}$ : Matrix of explanatory variables on which **no** hierarchies are accounted for
+-   $\mathbf{Z}$ : Matrix of explanatory variables on which hierarchies are accounted for
+-   $\boldsymbol{\beta}$ : parameter estimated without a hierarchy
+-   $\mathbf{b}$ : parameter estimated with a hierarchy
+-   $\boldsymbol{\varepsilon}$ : a vector that follows a Gaussian distribution such that ${\cal N}(0, \sigma^2)$
+:::
+
+## Hierarchical models: in code
+
+The "`|`"
+
+-   handy but a giant source of confusion
+-   read it like "(things groups do differently \| names of the groups)"
+-   adds parameters to a model
+
+## Hierarchy on the intercept
+
+```{r, echo=FALSE, fig.width=8,  fig.height=8, fig.align='center'}
+zones=matrix(c(1,2), ncol=2, byrow=TRUE)
+layout(zones, widths=c(1/5,4/5), heights=c(1/5,4/5))
+
+val <- seq(-1, 3, length = 200)
+marginal <- dnorm(val, mean = .5, sd = 0.5)
+
+par(mar = c(0.1, 0.1, 0.1, 0.1))
+plot(-marginal,val,
+     type = "n",
+     ylim = c(-3,3),
+     axes = FALSE,
+     xlab = "",
+     ylab = "") 
+
+polygon(x = c(-marginal,-marginal[1]),
+        y = c(val, val[1]),
+        col = rgb(0,0,1, 0.5),border = NA)
+
+lines(-marginal,val, lwd = 3)
+
+plot(0,0,
+     type = "n",
+     xlim = c(0,5),
+     ylim = c(-3,3),
+     bty="L",
+     xaxt = "n",
+     yaxt = "n",
+     xlab = "",
+     ylab = "")
+
+set.seed(42)
+intercepts <- rnorm(30, .5, .5)
+slopes <- rep(0, 30)
+for (i in 1:30){
+  abline(a = intercepts[i],
+         b = slopes[i],
+         lwd = 3,
+         col = "blue")
+}
+
+```
+
+## Hierarchy on the slopes
+
+```{r, echo=FALSE, fig.width=8,  fig.height=8, fig.align='center'}
+plot(0,0,
+     type = "n",
+     xlim = c(0,5),
+     ylim = c(0,5),
+     bty="L",
+     xaxt = "n",
+     yaxt = "n",
+     xlab = "",
+     ylab = "",
+     xaxs = "i",
+     yaxs = "i") 
+
+set.seed(42)
+for(i in 1:30){
+abline(a = 0, b = rnorm(1, mean = 1, sd = 0.2),
+       lwd = 3,
+       col = "blue")
+}
+
+marginalRot <- spdep::Rotation(cbind(-marginal,val), angle = 3.9)
+
+par(xpd = TRUE)
+
+polygon(x = c(marginalRot[,1] + 1.5,marginalRot[1,1] + 1.5),
+        y = c(marginalRot[,2] + 2.5, marginalRot[1,2] + 2.5),
+        col = rgb(0,0,1, 0.5),border = NA)
+
+polygon(x = c(marginalRot[,1] + 2.5,marginalRot[1,1] + 2.5),
+        y = c(marginalRot[,2] + 3.5, marginalRot[1,2] + 3.5),
+        col = rgb(0,0,1, 0.5),border = NA)
+
+polygon(x = c(marginalRot[,1] + 3.5,marginalRot[1,1] + 3.5),
+        y = c(marginalRot[,2] + 4.5, marginalRot[1,2] + 4.5),
+        col = rgb(0,0,1, 0.5),border = NA)
+
+lines(marginalRot[,1]+1.5, marginalRot[,2] + 2.5, lwd = 3)
+lines(marginalRot[,1]+2.5, marginalRot[,2] + 3.5, lwd = 3)
+lines(marginalRot[,1]+3.5, marginalRot[,2] + 4.5, lwd = 3)
+par(xpd = FALSE)
+```

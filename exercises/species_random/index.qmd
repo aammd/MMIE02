@@ -1,0 +1,144 @@
+---
+title: "Random groups with not many levels: species as random effects"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+I'm curious what would happen with random effect in this model rather than a
+
+```{r}
+
+library(ggplot2)
+suppressPackageStartupMessages(library(dplyr))
+library(tidybayes)
+suppressPackageStartupMessages(library(rstanarm))
+```
+
+## Statistical models of Penguin bill morphology.
+
+We'll be studying the relationship between two numbers about penguin bills. Specifically, we'll ask **"Are longer bills also deeper?"**. This question might not be the most interesting ecologically, but it is a great chance to practice some interesting stats.
+
+Let's begin with plotting the data:
+
+```{r}
+#| fig-cap: Bill depth (mm) as predicted by bill length (mm) across the entire `palmerpenguins` dataset.
+penguins |> 
+  ggplot(aes(x = bill_len, y = bill_dep)) + 
+  geom_point() + 
+  stat_smooth(method = "lm")
+```
+
+## modelling without species
+
+```{r}
+bill_len_centered <- with(penguins,
+                          bill_len - mean(bill_len,
+                                                na.rm = TRUE))
+
+## make up a short vector
+some_bill_lengths <- seq(
+  from = min(bill_len_centered, na.rm = TRUE), 
+  to = max(bill_len_centered, na.rm = TRUE),
+  length.out = 10
+  )
+```
+
+```{r}
+## get data ready
+peng_dep_len_df <- penguins |> 
+  tidyr::drop_na(bill_dep, bill_len) |> 
+  mutate(bill_len_cen = bill_len - mean(bill_len))
+
+## fit model with rstanarm
+normal_reg_stan <- stan_glm(
+  bill_dep ~ 1 + bill_len_cen,
+  data = peng_dep_len_df,
+  family = gaussian(),
+
+  # priors
+  prior = normal(0, 0.5),          # slope (bill_len_cen)
+  prior_intercept = normal(17, 2), # intercept
+  prior_aux = exponential(0.5),    # sigma
+
+  chains = 4,
+  iter = 2000,
+  refresh = 0,
+  seed = 525600
+)
+
+normal_reg_stan
+```
+
+```{r}
+## fit model with rstanarm
+normal_reg_spp_stan <- stan_glm(
+  bill_dep ~ 1 + bill_len_cen + species,
+  data = peng_dep_len_df,
+  family = gaussian(),
+
+  # priors
+  prior = normal(0, 0.5),          # slope (bill_len_cen)
+  prior_intercept = normal(17, 2), # intercept
+  prior_aux = exponential(0.5),    # sigma
+
+  chains = 4,
+  iter = 2000,
+  refresh = 0,
+  seed = 525600
+)
+
+normal_reg_spp_stan
+```
+
+try a random effect -- with just three little groups for species!
+
+```{r}
+## fit model with rstanarm
+normal_reg_hier_spp_stan <- stan_glmer(
+  bill_dep ~ 1 + bill_len_cen + (1|species),
+  data = peng_dep_len_df,
+  family = gaussian(),
+
+  # priors
+  prior = normal(0, 0.5),          # slope (bill_len_cen)
+  prior_intercept = normal(17, 2), # intercept
+  prior_aux = exponential(0.5),    # sigma
+
+  chains = 4,
+  iter = 2000,
+  refresh = 0,
+  seed = 525600
+)
+
+normal_reg_hier_spp_stan
+```
+
+Try comparing all three models:
+
+```{r}
+rstanarm::loo_compare(
+  loo(normal_reg_stan), 
+  loo(normal_reg_spp_stan), 
+  loo(normal_reg_hier_spp_stan)
+)
+```
+
+## Making novel predictions
+
+```{r}
+library(modelr)
+
+fake_penguins <- expand.grid(
+  bill_len_cen = modelr::seq_range(peng_dep_len_df$bill_len_cen, n = 4),
+  species = c("Hollander",levels(peng_dep_len_df$species))
+)
+
+add_predicted_rvars(fake_penguins, normal_reg_hier_spp_stan) |> 
+  ggplot(aes(x = bill_len_cen, ydist = .prediction)) + 
+  tidybayes::stat_lineribbon() + 
+  facet_wrap(~species)
+
+
+```
+
