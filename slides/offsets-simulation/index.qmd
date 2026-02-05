@@ -1,0 +1,171 @@
+---
+title: "One weird trick: offsets in link functions"
+format: 
+  revealjs
+execute: 
+  echo: true
+---
+
+## Link functions: the secret advantage
+
+a GLM looks in a general way like this:
+
+$$
+\begin{align}
+y &\sim \text{Distribution}(\mu, \theta)\\
+g^{-1}(\mu) &= \beta_0 + \beta_1x ...
+\end{align}
+$$
+
+## Link functions: the secret advantage
+
+For example, a Poisson distribution looks like this: 
+
+
+$$
+\begin{align}
+y &\sim \text{Poisson}(\lambda
+)\\
+\ln(\lambda) &= \beta_0 + \beta_1x ...
+\end{align}
+$$
+but let's just $\alpha$ as the log of the average ($\lambda$) of the distribution.
+
+$$
+\begin{align}
+y &\sim \text{Poisson}(\lambda
+)\\
+\ln(\lambda) &= \alpha.
+\end{align}
+$$
+
+## Simulations
+
+![](../../img/hattori.jpeg)
+
+## Simulation validation --  Poisson
+
+Imaginary study of a little plant, with 4 plants / m<sup>2</sup>
+and 30 samples
+
+```{r echo=TRUE}
+#| output-location: column
+avg_plant_m2 <- 4
+n_plots <- 30
+# simulate
+set.seed(1234)
+plant_counts <- rpois(
+  n_plots,
+  avg_plant_m2)
+hist(plant_counts)
+
+```
+
+```{r echo=TRUE}
+confint(glm(plant_counts ~ 1, 
+    family = poisson(link = "identity")))
+```
+
+## Simulation -- Poisson on the log scale
+
+We're more used to doing a Poisson model on the log scale, like this:
+
+```{r echo=TRUE}
+#| output-location: column
+log_avg_plant_m2 <- log(4)
+n_plots <- 30
+# simulate
+set.seed(1234)
+plant_counts <- rpois(
+  n_plots,
+  exp(log_avg_plant_m2))
+hist(plant_counts)
+
+```
+```{r echo=TRUE}
+confint(glm(plant_counts ~ 1, 
+    family = poisson(link = "log")))
+log_avg_plant_m2
+```
+
+## Simulation validation -- Poisson 
+
+Now imagine our plots are either 1, 2 or 5 m<sup>2</sup>
+
+```{r}
+#| output-location: slide
+#| echo: true
+suppressPackageStartupMessages(library(tidyverse))
+set.seed(1618)
+fake_plant_data <- tibble(
+  plot_size = rep(c(1, 2, 5), each = 10),
+  avg_plants = plot_size * exp(log_avg_plant_m2),
+  obs_plants = rpois(n = 30, lambda = avg_plants))
+
+# plot the histogram
+fake_plant_data |> 
+  ggplot(aes(x = obs_plants))+ 
+  geom_histogram()
+
+```
+## Wrong model, wrong answer
+
+What happens if we fit the wrong model to these data, ignoring sample size?
+
+```{r}
+# fit the wrong(!) model
+confint(glm(obs_plants ~ 1, 
+            data = fake_plant_data,
+    family = poisson(link = "log")))
+```
+
+but the true value of `log_avg_plant_m2` is `r log_avg_plant_m2` !! 
+
+put another way, the true density is 4 plants/m<sup>2</sup> but the model thinks it is `r exp(coef(glm(obs_plants ~ 1, data = fake_plant_data,family = poisson(link = "log"))))`
+
+## Solution: use an offset term
+
+:::: {.columns}
+
+::: {.column width="40%"}
+Let's say that: 
+
+* $A$ is the area of a plot in m<sup>2</sup>
+* $\lambda$ is the average plants/m<sup>2</sup>
+* the **log** of  average plants/m<sup>2</sup> is $\alpha$, so $\alpha = \ln(\lambda)$
+
+:::
+
+::: {.column width = "60%"}
+
+$$
+\begin{align}
+y &\sim \text{Poisson}(A\lambda) \\
+&\sim \text{Poisson}(Ae^\alpha) \\
+&\sim \text{Poisson}(e^{\ln{A}}e^\alpha) \\ 
+&\sim \text{Poisson}(e^{\alpha + \ln{A}}) \\ 
+\end{align}
+$$
+So with the log link, the linear predictor becomes
+
+$$
+\alpha + \ln{A}
+$$
+
+:::
+
+::::
+
+## using `offset` in a linear model
+
+We need to add $\ln{A}$ to our model but we want a coefficient of **exactly 1** -- no need for a seperate slope term!
+
+**NOTE** you need to perform the `log` operation yourself! 
+
+```{r}
+confint(glm(obs_plants ~ 1 + offset(log(plot_size)), 
+            data = fake_plant_data,
+    family = poisson(link = "log")))
+```
+
+Once again the true value of `log_avg_plant_m2` is `r log_avg_plant_m2`

@@ -740,5 +740,103 @@
     "title": "index",
     "section": "A bit of vocabulary",
     "text": "A bit of vocabulary\nMultiple Definition of fixed and random effects\n. . .\n\n(Kreft and De Leeuw 1998) Fixed effects are constant and random effect vary\n\n. . .\n\n(Searl et al. 1992) Effects are fixed if they are interesting in themselves or random if there is interest in the underlying population\n\n. . .\n\n(Green and Tukey 1960) When a sample exhausts the population, the corresponding variable is fixed; when the sample is a small (i.e., negligible) part of the population the corresponding variable is random\n\n. . .\n\n(Roy LaMotte 2014) If an effect is assumed to be a realized value of a random variable, it is called a random effect\n\n. . .\n\n(Robinson 1991) Fixed effects are estimated using least squares (or, more generally, maximum likelihood) and random effects are estimated with shrinkage."
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#link-functions-the-secret-advantage",
+    "href": "slides/offsets-simulation/index.html#link-functions-the-secret-advantage",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Link functions: the secret advantage",
+    "text": "Link functions: the secret advantage\na GLM looks in a general way like this:\n\\[\n\\begin{align}\ny &\\sim \\text{Distribution}(\\mu, \\theta)\\\\\ng^{-1}(\\mu) &= \\beta_0 + \\beta_1x ...\n\\end{align}\n\\]"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#link-functions-the-secret-advantage-1",
+    "href": "slides/offsets-simulation/index.html#link-functions-the-secret-advantage-1",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Link functions: the secret advantage",
+    "text": "Link functions: the secret advantage\nFor example, a Poisson distribution looks like this:\n\\[\n\\begin{align}\ny &\\sim \\text{Poisson}(\\lambda\n)\\\\\n\\ln(\\lambda) &= \\beta_0 + \\beta_1x ...\n\\end{align}\n\\] but let’s just \\(\\alpha\\) as the log of the average (\\(\\lambda\\)) of the distribution.\n\\[\n\\begin{align}\ny &\\sim \\text{Poisson}(\\lambda\n)\\\\\n\\ln(\\lambda) &= \\alpha.\n\\end{align}\n\\]"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#simulation-validation",
+    "href": "slides/offsets-simulation/index.html#simulation-validation",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Simulation validation",
+    "text": "Simulation validation\n\naverage_plant &lt;- 4\nn_plots &lt;- 30\n# simulate\nset.seed(1234)\nplant_counts &lt;- rpois(n_plots, average_plant)\nhist(plant_counts)"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#simulation-validation-simple-poisson",
+    "href": "slides/offsets-simulation/index.html#simulation-validation-simple-poisson",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Simulation validation – simple Poisson",
+    "text": "Simulation validation – simple Poisson\n\n\naverage_plant &lt;- 4\nn_plots &lt;- 30\n# simulate\nset.seed(1234)\nplant_counts &lt;- rpois(\n  n_plots,\n  average_plant)\nhist(plant_counts)\n\n\n\n\n\n\n\n\n\n\nconfint(glm(plant_counts ~ 1, \n    family = poisson(link = \"identity\")))\n\n   2.5 %   97.5 % \n2.993295 4.358789"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#simulation-validation-simple-poisson-1",
+    "href": "slides/offsets-simulation/index.html#simulation-validation-simple-poisson-1",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Simulation validation – simple Poisson",
+    "text": "Simulation validation – simple Poisson"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#simulation-validation-poisson",
+    "href": "slides/offsets-simulation/index.html#simulation-validation-poisson",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Simulation validation – Poisson",
+    "text": "Simulation validation – Poisson\nImaginary study of a little plant, with 4 plants / m2 and 30 samples\n\n\navg_plant_m2 &lt;- 4\nn_plots &lt;- 30\n# simulate\nset.seed(1234)\nplant_counts &lt;- rpois(\n  n_plots,\n  avg_plant_m2)\nhist(plant_counts)\n\n\n\n\n\n\n\n\n\n\nconfint(glm(plant_counts ~ 1, \n    family = poisson(link = \"identity\")))\n\n   2.5 %   97.5 % \n2.993295 4.358789"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#simulation-validation-poisson-but-with-different-sample-sizes",
+    "href": "slides/offsets-simulation/index.html#simulation-validation-poisson-but-with-different-sample-sizes",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Simulation validation – Poisson but with different sample sizes",
+    "text": "Simulation validation – Poisson but with different sample sizes\nWhat would happen if we had several plots and they were NOT the same size?"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#simulation-validation-poisson-1",
+    "href": "slides/offsets-simulation/index.html#simulation-validation-poisson-1",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Simulation validation – Poisson",
+    "text": "Simulation validation – Poisson\nNow imagine our plots are either 1, 2 or 5 m2\n\nsuppressPackageStartupMessages(library(tidyverse))\nset.seed(1618)\nfake_plant_data &lt;- tibble(\n  plot_size = rep(c(1, 2, 5), each = 10),\n  avg_plants = plot_size * exp(log_avg_plant_m2),\n  obs_plants = rpois(n = 30, lambda = avg_plants))\n\n# plot the histogram\nfake_plant_data |&gt; \n  ggplot(aes(x = obs_plants))+ \n  geom_histogram()"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#simulation-poisson-on-the-log-scale",
+    "href": "slides/offsets-simulation/index.html#simulation-poisson-on-the-log-scale",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Simulation – Poisson on the log scale",
+    "text": "Simulation – Poisson on the log scale\nWe’re more used to doing a Poisson model on the log scale, like this:\n\n\nlog_avg_plant_m2 &lt;- log(4)\nn_plots &lt;- 30\n# simulate\nset.seed(1234)\nplant_counts &lt;- rpois(\n  n_plots,\n  exp(log_avg_plant_m2))\nhist(plant_counts)\n\n\n\n\n\n\n\n\n\n\nconfint(glm(plant_counts ~ 1, \n    family = poisson(link = \"log\")))\n\n   2.5 %   97.5 % \n1.096352 1.472180 \n\nlog_avg_plant_m2\n\n[1] 1.386294"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#simulation-validation-poisson-1-output",
+    "href": "slides/offsets-simulation/index.html#simulation-validation-poisson-1-output",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Simulation validation – Poisson",
+    "text": "Simulation validation – Poisson"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#wrong-model-wrong-answer",
+    "href": "slides/offsets-simulation/index.html#wrong-model-wrong-answer",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Wrong model, wrong answer",
+    "text": "Wrong model, wrong answer\nWhat happens if we fit the wrong model to these data, ignoring sample size?\n\n# fit the wrong(!) model\nconfint(glm(obs_plants ~ 1, \n            data = fake_plant_data,\n    family = poisson(link = \"log\")))\n\n   2.5 %   97.5 % \n2.154985 2.384859 \n\n\nbut the true value of log_avg_plant_m2 is 1.3862944 !!\nput another way, the true density is 4 plants/m2 but the model thinks it is 9.7"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#solution-use-an-offset-term",
+    "href": "slides/offsets-simulation/index.html#solution-use-an-offset-term",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Solution: use an offset term",
+    "text": "Solution: use an offset term\n\n\nLet’s say that:\n\n\\(A\\) is the area of a plot in m2\n\\(\\lambda\\) is the average plants/m2\nthe log of average plants/m2 is \\(\\alpha\\), so \\(\\alpha = \\ln(\\lambda)\\)\n\n\n\\[\n\\begin{align}\ny &\\sim \\text{Poisson}(A\\lambda) \\\\\n&\\sim \\text{Poisson}(Ae^\\alpha) \\\\\n&\\sim \\text{Poisson}(e^{\\ln{A}}e^\\alpha) \\\\\n&\\sim \\text{Poisson}(e^{\\alpha + \\ln{A}}) \\\\\n\\end{align}\n\\] So with the log link, the linear predictor becomes\n\\[\n\\alpha + \\ln{A}\n\\]"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#using-offset-in-a-linear-model",
+    "href": "slides/offsets-simulation/index.html#using-offset-in-a-linear-model",
+    "title": "One weird trick: offsets in link functions",
+    "section": "using offset in a linear model",
+    "text": "using offset in a linear model\nWe need to add \\(\\ln{A}\\) to our model but we want a coefficient of exactly 1 – no need for a seperate slope term!\nNOTE you need to perform the log operation yourself!\n\nconfint(glm(obs_plants ~ 1 + offset(log(plot_size)), \n            data = fake_plant_data,\n    family = poisson(link = \"log\")))\n\n   2.5 %   97.5 % \n1.174155 1.404030 \n\n\nOnce again the true value of log_avg_plant_m2 is 1.3862944"
+  },
+  {
+    "objectID": "slides/offsets-simulation/index.html#simulations",
+    "href": "slides/offsets-simulation/index.html#simulations",
+    "title": "One weird trick: offsets in link functions",
+    "section": "Simulations",
+    "text": "Simulations"
   }
 ]
