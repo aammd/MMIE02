@@ -1,0 +1,277 @@
+---
+title: "Overdispersion: or, how to use predictions to find problems"
+format: html
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(rstanarm)
+suppressPackageStartupMessages(library(tidyverse))
+library(tidybayes)
+```
+
+
+
+In this exercise we'll look at two ways to think about fixing overdispersion in a count model, and also practice making prediction figures to diagnose a model.
+
+### What is the question? 
+
+Let's write a model to answer the question:  
+
+**How does the total abundance of the mite community change as water content increases?**  
+
+
+## Observation-level random effects: Mite abundance
+
+Here's a partially complete model for abundance over time
+
+$$
+\begin{align}
+\text{N}_i &\sim \text{Poisson}(e^a) \\
+a &= \bar\beta + \beta_{\text{water}} \cdot \text{water}_i \\
+\bar\beta &\sim \text{Normal}(?, ?) \\
+\beta_{\text{water}} &\sim \text{Normal}(?, ?) \\
+\end{align}
+$$
+  
+:::{.callout-tip}
+
+### EXERCISE 
+Simulate from this model, and look at your simulations to decide on a reasonable prior for the data.
+:::
+  
+:::{.callout-note collapse="true"}
+### SOLUTION
+```{r}
+n <- 30
+water <- seq(from = -5, to = 5, length.out = n)
+
+b0 <- rnorm(1, mean = log(17), sd = .3)
+b1 <- rnorm(1, mean = 0, sd = .2)
+
+S <- rpois(n, lambda = exp(b0 + b1*water))
+plot(water, S)
+```
+:::
+  
+### Data preparation & visualization
+  
+First we need to load and prepare the data:
+  
+```{r}
+data(mite, package = "vegan")
+data("mite.env", package = "vegan")
+
+# combine data and environment
+
+mite_data_long <- mite |> 
+  tibble::rownames_to_column(var = "site_id") |> 
+  bind_cols(mite.env) |> 
+  pivot_longer(Brachy:Trimalc2,
+               names_to = "spp", values_to = "abd")
+```
+
+
+First let's transform the mite dataset into a dataframe of total community abundance (N) per site. 
+We'll also standardize the water content while we're at it:
+
+```{r}
+mite_community_abd <- mite_data_long |> 
+  group_by(site_id, WatrCont) |> 
+  summarize(N = sum(abd)) |>
+  ungroup() |> 
+  mutate(water_c = (WatrCont - mean(WatrCont))/100)
+
+knitr::kable(head(mite_community_abd))
+```
+
+We get a nice histogram of community abundance, and a clear negative relationship with water volume:
+
+```{r}
+#| layout-ncol: 2
+mite_community_abd |> 
+  ggplot(aes(x = N)) + 
+  geom_histogram()
+
+mite_community_abd |> 
+  ggplot(aes(x = water_c, y = N)) + 
+  geom_point()
+```
+
+```{r}
+## data! 
+glimpse(mite_community_abd)
+
+mite_stan <- stan_glm(
+  N ~ 1 + water_c,
+  data = mite_community_abd,
+  family = poisson(link = "log"),
+  prior_intercept = normal(2.8, 0.3, autoscale = FALSE),
+  prior = normal(0, 0.2, autoscale = FALSE),
+  refresh = 0
+)
+
+```
+
+
+```{r}
+summary(mite_stan)
+```
+Note that the water coefficient is quite positive -- not very consistent with our figure! 
+
+
+```{r}
+bayesplot::mcmc_areas(mite_stan, "water_c")
+```
+
+
+Plot the predicted line:
+
+```{r}
+library(modelr)
+mite_community_abd |> 
+  modelr::data_grid(water_c = seq_range(water_c, n = 7)) |> 
+  tidybayes::add_predicted_rvars(mite_stan) |> 
+  ggplot(aes(x = water_c, ydist = .prediction)) + 
+  stat_dist_lineribbon() + 
+  scale_fill_brewer(palette = "Greens", direction=-1) + 
+  geom_point(aes(x = water_c, y = N),
+             data = mite_community_abd, inherit.aes = FALSE)
+```
+
+```{r}
+pp_check(mite_stan, type = "dens_overlay")
+```
+
+
+## Improving the Poisson model with an observation-level random effect
+
+Observation-level random effects add flexibility to a Poisson model and allow us to model the additional variation.
+
+```{r}
+## data! 
+glimpse(mite_community_abd)
+
+
+mite_stan_olre <- stan_glmer(
+  N ~ 1 + water_c + (1|site_id),
+  data = mite_community_abd,
+  family = poisson(link = "log"),
+  prior_intercept = normal(2.8, 0.3, autoscale = FALSE),
+  prior = normal(0, 0.2, autoscale = FALSE),
+  prior_covariance = decov(shape = 1, scale = .5),
+  refresh = 0
+)
+
+summary(mite_stan_olre)
+```
+
+```{r}
+library(modelr)
+mite_community_abd |> 
+  modelr::data_grid(water_c = seq_range(water_c, n = 7),
+                    site_id = "Ireland") |> 
+  tidybayes::add_predicted_rvars(mite_stan_olre,
+                                 allow_new_levels = TRUE,
+                                 sample_new_levels = "gaussian") |> 
+  ggplot(aes(x = water_c, ydist = .prediction)) + 
+  stat_dist_lineribbon() + 
+  scale_fill_brewer(palette = "Greens", direction=-1) + 
+  geom_point(aes(x = water_c, y = N),
+             data = mite_community_abd, inherit.aes = FALSE)
+```
+
+```{r}
+pp_check(mite_stan_olre)
+```
+
+## Negative binomial regression
+
+Another way to model variable count data is via the Negative Binomial distribution. Read more about the [distribution on Wikipedia](https://en.wikipedia.org/wiki/Negative_binomial_distribution), check the way the distribution is [parameterized in brms](https://paulbuerkner.com/brms/articles/brms_families.html#binary-and-count-data-models) , and look at what link family are used via `?brms::brmsfamily` which is also [online here](https://paulbuerkner.com/brms/reference/brmsfamily.html)
+
+```{r}
+
+mite_negbin_stan_prior <- stan_glm(
+  N ~ 1 + water_c,
+  data = mite_community_abd,
+  family = neg_binomial_2(link = "log"),
+  prior_intercept = normal(2.8, 0.3, autoscale = FALSE),
+  prior = normal(0, 0.2, autoscale = FALSE),
+  prior_aux = normal(3, 1, autoscale = FALSE),  # shape (log scale in brms ≈ aux in rstanarm)
+  prior_PD = FALSE,
+  refresh = 0
+)
+
+mite_community_abd |>
+  modelr::data_grid(water_c = seq_range(water_c, n = 7)) |>
+  tidybayes::add_predicted_draws(mite_negbin_stan_prior, ndraws = 12) |>
+  ggplot(aes(x = water_c, y = .prediction)) +
+  geom_point() +
+  facet_wrap(~.draw)
+
+```
+
+Now run the model for real
+
+```{r}
+mite_negbin_stan <- stan_glm(
+  N ~ 1 + water_c,
+  data = mite_community_abd,
+  family = neg_binomial_2(link = "log"),
+  prior_intercept = normal(2.8, 0.3, autoscale = FALSE),
+  prior = normal(0, 0.2, autoscale = FALSE),
+  prior_aux = normal(3, 1, autoscale = FALSE),  # shape (log scale in brms ≈ aux in rstanarm)
+  prior_PD = FALSE,
+  refresh = 0
+)
+```
+
+
+And plot the predictions
+
+
+```{r}
+mite_community_abd |> 
+  modelr::data_grid(water_c = seq_range(water_c, n = 7),
+                    site_id = "Ireland") |> 
+  tidybayes::add_predicted_rvars(mite_negbin_stan,
+                                 allow_new_levels = TRUE,
+                                 sample_new_levels = "gaussian") |> 
+  ggplot(aes(x = water_c, ydist = .prediction)) + 
+  stat_dist_lineribbon() + 
+  scale_fill_brewer(palette = "Greens", direction=-1) + 
+  geom_point(aes(x = water_c, y = N),
+             data = mite_community_abd, inherit.aes = FALSE)
+```
+
+```{r}
+pp_check(mite_negbin_stan)
+```
+
+
+
+And we can also compare these three models, using 
+
+```{r}
+rstanarm::loo_compare(
+  loo(mite_stan), 
+  loo(mite_stan_olre), 
+  loo(mite_negbin_stan)
+)
+```
+
+
+### Exercise
+
+Run a negative binomial regression, and compare to the example above.
+
+
+```{r, eval=FALSE, include=FALSE}
+mite_community_abd |> 
+  modelr::data_grid(water_c = seq_range(water_c, n = 7)) |> 
+  tidybayes::add_predicted_rvars(mite_negbin_prior_brm,ndraws = 12) |> 
+  ggplot(aes(x = water_c, ydist = .prediction)) + 
+  stat_dist_lineribbon()
+```
+

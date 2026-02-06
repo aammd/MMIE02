@@ -5,19 +5,22 @@ editor_options:
   chunk_output_type: console
 ---
 
-I'm curious what would happen with random effect in this model rather than a
+We'll use the penguin data to show how random effects can be used:
+
+-   in place of fixed effects
+-   to make predictions for new groups
 
 ```{r}
 
 library(ggplot2)
-suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(tidyverse))
 library(tidybayes)
 suppressPackageStartupMessages(library(rstanarm))
 ```
 
 ## Statistical models of Penguin bill morphology.
 
-We'll be studying the relationship between two numbers about penguin bills. Specifically, we'll ask **"Are longer bills also deeper?"**. This question might not be the most interesting ecologically, but it is a great chance to practice some interesting stats.
+We'll start with a review of the Simpson's Paradox demonstration.
 
 Let's begin with plotting the data:
 
@@ -29,27 +32,25 @@ penguins |>
   stat_smooth(method = "lm")
 ```
 
-## modelling without species
-
-```{r}
-bill_len_centered <- with(penguins,
-                          bill_len - mean(bill_len,
-                                                na.rm = TRUE))
-
-## make up a short vector
-some_bill_lengths <- seq(
-  from = min(bill_len_centered, na.rm = TRUE), 
-  to = max(bill_len_centered, na.rm = TRUE),
-  length.out = 10
-  )
-```
+## Data preparation
 
 ```{r}
 ## get data ready
+bill_len_centered <- with(penguins,
+                          bill_len - mean(bill_len,
+                                                na.rm = TRUE))
 peng_dep_len_df <- penguins |> 
   tidyr::drop_na(bill_dep, bill_len) |> 
   mutate(bill_len_cen = bill_len - mean(bill_len))
+```
 
+## Model fitting
+
+We'll fit three different models here and then compare them.
+
+First, a model with no species in it:
+
+```{r}
 ## fit model with rstanarm
 normal_reg_stan <- stan_glm(
   bill_dep ~ 1 + bill_len_cen,
@@ -62,6 +63,7 @@ normal_reg_stan <- stan_glm(
   prior_aux = exponential(0.5),    # sigma
 
   chains = 4,
+  cores = 4,
   iter = 2000,
   refresh = 0,
   seed = 525600
@@ -69,6 +71,8 @@ normal_reg_stan <- stan_glm(
 
 normal_reg_stan
 ```
+
+Then, one that adds species as a fixed effect:
 
 ```{r}
 ## fit model with rstanarm
@@ -83,6 +87,7 @@ normal_reg_spp_stan <- stan_glm(
   prior_aux = exponential(0.5),    # sigma
 
   chains = 4,
+  cores = 4,
   iter = 2000,
   refresh = 0,
   seed = 525600
@@ -91,7 +96,7 @@ normal_reg_spp_stan <- stan_glm(
 normal_reg_spp_stan
 ```
 
-try a random effect -- with just three little groups for species!
+Finally, a random effect for species. With only three levels, this random effect will probably be exactly like the fixed effect above:
 
 ```{r}
 ## fit model with rstanarm
@@ -103,16 +108,31 @@ normal_reg_hier_spp_stan <- stan_glmer(
   # priors
   prior = normal(0, 0.5),          # slope (bill_len_cen)
   prior_intercept = normal(17, 2), # intercept
-  prior_aux = exponential(0.5),    # sigma
+  prior_aux = exponential(2),    # sigma
 
   chains = 4,
+  cores = 4,
   iter = 2000,
-  refresh = 0,
+  refresh = 1000,
   seed = 525600
 )
 
 normal_reg_hier_spp_stan
 ```
+
+## Pairwise differences:
+
+```{r}
+get_variables(normal_reg_hier_spp_stan)
+
+normal_reg_hier_spp_stan %>%
+  spread_draws(b[term, spp]) |> 
+  compare_levels(b, by = spp) |> 
+  ggplot(aes(x = b, y = spp)) + 
+  stat_halfeye()
+```
+
+## Model comparison
 
 Try comparing all three models:
 
@@ -122,6 +142,34 @@ rstanarm::loo_compare(
   loo(normal_reg_spp_stan), 
   loo(normal_reg_hier_spp_stan)
 )
+```
+
+Let's look at the actual coefficients involved
+
+```{r}
+get_variables(normal_reg_hier_spp_stan)
+
+hier_avg <- normal_reg_hier_spp_stan %>%
+  spread_rvars(`(Intercept)`, b[spp]) |> 
+  mutate(spp_avg = `(Intercept)` + b,
+         spp = str_replace(spp, "\\(Intercept\\) species:", ""),
+         model = "hierarchical") |> 
+  select(model, spp, spp_avg)
+
+get_variables(normal_reg_spp_stan) 
+
+simple_avg <- normal_reg_spp_stan |> 
+  spread_rvars(`(Intercept)`, speciesChinstrap, speciesGentoo) |> 
+  mutate(Adelie = `(Intercept)`,
+         Chinstrap = Adelie + speciesChinstrap,
+         Gentoo = Adelie + speciesGentoo) |> 
+  select(Adelie, Chinstrap, Gentoo) |> 
+  tidyr::pivot_longer(everything(), names_to = "spp", values_to = "spp_avg") |> 
+  mutate(model = "simple", .before = "spp")
+
+bind_rows(simple_avg, hier_avg) |> 
+  ggplot(aes(x= spp, ydist = spp_avg, col = model)) + 
+  stat_halfeye(position = position_dodge(width = .5))
 ```
 
 ## Making novel predictions
@@ -141,4 +189,3 @@ add_predicted_rvars(fake_penguins, normal_reg_hier_spp_stan) |>
 
 
 ```
-

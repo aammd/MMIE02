@@ -21,3 +21,6 @@ title: "MMIE02: Mixed Methods in Ecology"
 * [Hierarchical model slides](slides/06_Simple_hierarchical_model/)
 * [One random effect: species as a random effect](exercises/species_random/)
 * [Logistic regression](exercises/logistic_regression/)
+
+## Thursday 05 Feb
+
